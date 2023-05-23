@@ -1,0 +1,42 @@
+use GD1C2023
+go
+
+drop table CARPINCHO_LOVERS.categoria
+drop table CARPINCHO_LOVERS.cupon
+drop table CARPINCHO_LOVERS.cupon_tipo
+drop table CARPINCHO_LOVERS.cupon_x_pedido
+drop table CARPINCHO_LOVERS.cupon_reclamo
+drop table CARPINCHO_LOVERS.dia
+drop table CARPINCHO_LOVERS.direccion_envio
+drop table CARPINCHO_LOVERS.direccion_usuario
+drop table CARPINCHO_LOVERS.envio
+drop table CARPINCHO_LOVERS.envio_mensajeria
+drop table CARPINCHO_LOVERS.estado_mensajeria
+drop table CARPINCHO_LOVERS.estado_pedido
+drop table CARPINCHO_LOVERS.estado_posible_envio
+drop table CARPINCHO_LOVERS.estado_posible_pedido
+drop table CARPINCHO_LOVERS.estado_reclamo
+drop table CARPINCHO_LOVERS.estado_posible_reclamo
+drop table CARPINCHO_LOVERS.horario
+drop table CARPINCHO_LOVERS.local
+drop table CARPINCHO_LOVERS.local_x_producto
+drop table CARPINCHO_LOVERS.marca_tarjeta
+drop table CARPINCHO_LOVERS.medio_de_pago
+drop table CARPINCHO_LOVERS.movilidad_tipo
+drop table CARPINCHO_LOVERS.operador_reclamo
+drop table CARPINCHO_LOVERS.paquete
+drop table CARPINCHO_LOVERS.pedido
+drop table CARPINCHO_LOVERS.producto
+drop table CARPINCHO_LOVERS.producto_pedido
+drop table CARPINCHO_LOVERS.provincia
+drop table CARPINCHO_LOVERS.reclamo
+drop table CARPINCHO_LOVERS.reclamo_tipo
+drop table CARPINCHO_LOVERS.repartidor
+drop table CARPINCHO_LOVERS.repartidor_x_localidad
+drop table CARPINCHO_LOVERS.tipo_local
+drop table CARPINCHO_LOVERS.tipo_medio_de_pago
+drop table CARPINCHO_LOVERS.tipo_paquete
+drop table CARPINCHO_LOVERS.usuario
+
+go
+drop schema CARPINCHO_LOVERS
