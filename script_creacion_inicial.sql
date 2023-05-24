@@ -12,7 +12,7 @@ create table CARPINCHO_LOVERS.usuario( -- Done
     usuario_telefono decimal(18, 0) not null,
     usuario_mail nvarchar(255) not null,
     usuario_fecha_nac date not null,
-    usuario_fecha_registro datetime not null,
+    usuario_fecha_registro datetime not null
 )
 
 create table CARPINCHO_LOVERS.repartidor( -- Done
@@ -286,14 +286,14 @@ create table CARPINCHO_LOVERS.envio_mensajeria( -- Done
     envio_mensajeria_medio_pago_id decimal(18 ,0) not null
 )
 
-create table CARPINCHO_LOVERS.estado_mensajeria( -- Done
+create table CARPINCHO_LOVERS.estado_mensajeria(
     estado_mensajeria_id decimal(18,0) not null identity(1,1),
     estado_mensajeria_nro decimal(18,0) not null,
     estado_envio_estado decimal(18,0) not null,
     estado_mensajeria_fecha datetime not null
 )
 
-create table CARPINCHO_LOVERS.estado_posible_envio( -- Done
+create table CARPINCHO_LOVERS.estado_posible_envio( 
     epe_id decimal(18,0) not null identity(1,1),
     epe_descripcion nvarchar(50) not null
 )
