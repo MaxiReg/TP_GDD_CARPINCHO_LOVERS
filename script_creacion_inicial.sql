@@ -43,7 +43,7 @@ create table CARPINCHO_LOVERS.direccion_usuario( -- Done
     direccion_usuario_id decimal(18, 0) not null,
     direccion_usuario_nombre nvarchar(50) not null,
     direccion_usuario_direccion nvarchar(255) not null,
-    direccion_usuario_localidad date not null
+    direccion_usuario_localidad decimal(18,0) not null
 )
 
 create table CARPINCHO_LOVERS.cupon( -- Done
@@ -60,7 +60,7 @@ create table CARPINCHO_LOVERS.cupon_tipo( -- Done
     cupon_tipo_descripcion nvarchar(50) not null
 )
 
-create table CARPINCHO_LOVERS.cupor_reclamo( -- Done
+create table CARPINCHO_LOVERS.cupon_reclamo( -- Done
     cupon_reclamo_reclamo_nro decimal(18, 0) not null,
     cupon_reclamo_nro decimal(18, 0) not null
 )
@@ -192,7 +192,7 @@ create table CARPINCHO_LOVERS.medio_de_pago( -- Done
     medio_pago_id decimal(18, 0) not null identity(1,1),
     medio_pago_nro_tarjeta nvarchar(50) not null,
     medio_pago_tipo decimal(18, 0) not null,
-    medio_pago_marca_tarjeta nvarchar(100) not null,
+    medio_pago_marca_tarjeta decimal(18, 0) not null,
     medio_pago_usuario_id decimal(18, 0) not null
 )
 
@@ -213,14 +213,14 @@ create table CARPINCHO_LOVERS.producto( -- Done
 )
 
 create table CARPINCHO_LOVERS.producto_pedido( -- Done
-    producto_pedido_producto_id decimal(18, 0) not null,
+    producto_pedido_producto_id nvarchar(50) not null,
     producto_pedido_local_id decimal(18, 0) not null,
     producto_pedido_codigo decimal(18, 0) not null,
     producto_pedido_cantidad decimal(18, 0) not null,
     producto_precio decimal(18, 2) not null
 )
 
-create table CARPINCHO_LOVERS.localXproducto( -- Done
+create table CARPINCHO_LOVERS.local_x_producto( -- Done
     producto_local_codigo nvarchar(50) not null,
     local_id decimal(18,0) not null,
     producto_local_precio decimal(18,2)
@@ -264,26 +264,26 @@ create table CARPINCHO_LOVERS.tipo_paquete( -- Done
 
 create table CARPINCHO_LOVERS.envio_mensajeria( -- Done
     envio_mensajeria_nro decimal(18 ,0) not null identity(1, 1),
-    envio_mesajeria_direccion_origen decimal(18 ,0) not null,
-    envio_mesajeria_direccion_destino decimal(18 ,0) not null,
-    envio_mesajeria_km decimal(18 ,2) not null,
-    envio_mesajeria_valor_asegurado decimal(18 ,2) not null,
-    envio_mesajeria_precio_envio decimal(18 ,2) not null,
-    envio_mesajeria_precio_seguro decimal(18 ,2) not null,
-    envio_mesajeria_precio_paquete decimal(18 ,2) not null,
-    envio_mesajeria_propina decimal(18 ,2) not null,
-    envio_mesajeria_total decimal(18 ,2) not null,
-    envio_mesajeria_observ nvarchar(255) not null,
-    envio_mesajeria_fecha datetime not null,
-    envio_mesajeria_fecha_entrega datetime not null,
-    envio_mesajeria_tiempo_estimado decimal(18 ,2) not null,
-    envio_mesajeria_calificacion decimal(18, 0) not null,
-    envio_mesajeria_estado nvarchar(50) not null,
-    envio_mesajeria_tipo_medio_pago_id decimal(18 ,0) not null,
-    envio_mesajeria_usuario_id decimal(18 ,0) not null,
-    envio_mesajeria_rapeetidor_id decimal(18 ,0) not null,
-    envio_mesajeria_paquete_id decimal(18 ,0) not null,
-    envio_mesajeria_medio_pago_id decimal(18 ,0) not null
+    envio_mensajeria_direccion_origen decimal(18 ,0) not null,
+    envio_mensajeria_direccion_destino decimal(18 ,0) not null,
+    envio_mensajeria_km decimal(18 ,2) not null,
+    envio_mensajeria_valor_asegurado decimal(18 ,2) not null,
+    envio_mensajeria_precio_envio decimal(18 ,2) not null,
+    envio_mensajeria_precio_seguro decimal(18 ,2) not null,
+    envio_mensajeria_precio_paquete decimal(18 ,2) not null,
+    envio_mensajeria_propina decimal(18 ,2) not null,
+    envio_mensajeria_total decimal(18 ,2) not null,
+    envio_mensajeria_observ nvarchar(255) not null,
+    envio_mensajeria_fecha datetime not null,
+    envio_mensajeria_fecha_entrega datetime not null,
+    envio_mensajeria_tiempo_estimado decimal(18 ,2) not null,
+    envio_mensajeria_calificacion decimal(18, 0) not null,
+    envio_mensajeria_estado nvarchar(50) not null,
+    envio_mensajeria_tipo_medio_pago_id decimal(18 ,0) not null,
+    envio_mensajeria_usuario_id decimal(18 ,0) not null,
+    envio_mensajeria_repartidor_id decimal(18 ,0) not null,
+    envio_mensajeria_paquete_id decimal(18 ,0) not null,
+    envio_mensajeria_medio_pago_id decimal(18 ,0) not null
 )
 
 create table CARPINCHO_LOVERS.estado_mensajeria( -- Done
@@ -305,7 +305,7 @@ alter table CARPINCHO_LOVERS.usuario add constraint pk_usuario primary key (usua
 alter table CARPINCHO_LOVERS.direccion_usuario add constraint pk_direccion_usuario primary key (direccion_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint pk_medio_de_pago primary key (medio_pago_id)
 alter table CARPINCHO_LOVERS.marca_tarjeta add constraint pk_marca_tarjeta primary key (marca_tarjeta_id)
-alter table CARPINCHO_LOVERS.tipo_medio_de_pago add constraint pk_tipo_medio_de_pago primary key (tipo_medio_de_pago_id)
+alter table CARPINCHO_LOVERS.tipo_medio_de_pago add constraint pk_tipo_medio_de_pago primary key (tipo_medio_pago_id)
 alter table CARPINCHO_LOVERS.localidad add constraint pk_localidad primary key (localidad_id)
 alter table CARPINCHO_LOVERS.provincia add constraint pk_provincia primary key (provincia_id)
 alter table CARPINCHO_LOVERS.local add constraint pk_local primary key (local_id)
@@ -358,9 +358,9 @@ alter table CARPINCHO_LOVERS.cupon_reclamo add constraint fk_cupon_reclamo_recla
         references CARPINCHO_LOVERS.reclamo (reclamo_nro)
 alter table CARPINCHO_LOVERS.repartidor add constraint fk_repartidor_tipo_movilidad foreign key (repartidor_tipo_movilidad)
         references CARPINCHO_LOVERS.movilidad_tipo (movilidad_tipo_id)
-alter table CARPINCHO_LOVERS.repartidor_x_localidad add constraint fk_repartidor_x_localida_repartidor foreign key (repartidor_id)
+alter table CARPINCHO_LOVERS.repartidor_x_localidad add constraint fk_repartidor_x_localidad_repartidor foreign key (repartidor_id)
         references CARPINCHO_LOVERS.repartidor (repartidor_id)
-alter table CARPINCHO_LOVERS.repartidor add constraint fk_repartidor_x_localidad_localidad foreign key (localidad_id)
+alter table CARPINCHO_LOVERS.localidad add constraint fk_repartidor_x_localidad_localidad foreign key (localidad_id)
         references CARPINCHO_LOVERS.localidad (localidad_id)
 alter table CARPINCHO_LOVERS.cupon_x_pedido add constraint fk_cupon_x_pedido_cupon foreign key (cupon_nro)
         references CARPINCHO_LOVERS.cupon (cupon_nro)
@@ -385,7 +385,7 @@ alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_local foreign key (
 alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_usuario foreign key (pedido_usuario_id)
         references CARPINCHO_LOVERS.usuario (usuario_id)
 alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_tipo_medio_pago foreign key (pedido_tipo_medio_pago)
-        references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_de_pago_id)
+        references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_pago_id)
 alter table CARPINCHO_LOVERS.pedido add constraint fk_medio_pago foreign key (pedido_medio_pago_id)
         references CARPINCHO_LOVERS.medio_de_pago (medio_pago_id)
 alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_envio foreign key (pedido_envio_id)
@@ -405,7 +405,7 @@ alter table CARPINCHO_LOVERS.estado_reclamo add constraint fk_estado_reclamo_rec
 alter table CARPINCHO_LOVERS.estado_reclamo add constraint fk_estado_reclamo_estado foreign key (estado_reclamo_estado)
         references CARPINCHO_LOVERS.estado_posible_reclamo (epr_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_tipo foreign key (medio_pago_tipo)
-        references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_de_pago_id)
+        references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_pago_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_marca_tarjeta foreign key (medio_pago_marca_tarjeta)
         references CARPINCHO_LOVERS.marca_tarjeta (marca_tarjeta_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_usuario foreign key (medio_pago_usuario_id)
@@ -420,21 +420,21 @@ alter table CARPINCHO_LOVERS.local_x_producto add constraint fk_local_x_producto
         references CARPINCHO_LOVERS.local (local_id)
 alter table CARPINCHO_LOVERS.categoria add constraint fk_categoria_tipo foreign key (categoria_tipo)
         references CARPINCHO_LOVERS.tipo_local (tipo_local_id)
-alter table CARPINCHO_LOVERS.paquete add constraint fk_paquete_tipo_paquete foreign key (paquete_tipo)
+alter table CARPINCHO_LOVERS.paquete add constraint fk_paquete_tipo_paquete foreign key (paquete_tipo_paquete)
         references CARPINCHO_LOVERS.tipo_paquete (tipo_paquete_id)
-alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_dir_orig foreign key (envio_mesajeria_direccion_origen)
-        references CARPINCHO_LOVERS.direccion_envio (direccion_enivo_id)
-alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_dir_des foreign key (envio_mesajeria_direccion_destino)
-        references CARPINCHO_LOVERS.direccion_envio (direccion_enivo_id)
-alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_tipo_medio_pago_id foreign key (envio_mesajeria_tipo_medio_pago_id)
-        references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_de_pago_id)
+alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_dir_orig foreign key (envio_mensajeria_direccion_origen)
+        references CARPINCHO_LOVERS.direccion_envio (direccion_envio_id)
+alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_dir_des foreign key (envio_mensajeria_direccion_destino)
+        references CARPINCHO_LOVERS.direccion_envio (direccion_envio_id)
+alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_tipo_medio_pago_id foreign key (envio_mensajeria_tipo_medio_pago_id)
+        references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_pago_id)
 alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_usuario foreign key (envio_mensajeria_usuario_id)
         references CARPINCHO_LOVERS.usuario (usuario_id)
-alter table CARPINCHO_LOVERS.envio_mesajeria add constraint fk_envio_mensajeria_repartidor foreign key (envio_mensajeria_repartidor_id)
+alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_repartidor foreign key (envio_mensajeria_repartidor_id)
         references CARPINCHO_LOVERS.repartidor (repartidor_id)
 alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_paquete foreign key (envio_mensajeria_paquete_id)
         references CARPINCHO_LOVERS.paquete (paquete_id)
-alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_medio_de_pago foreign key (envio_mesajeria_medio_pago_id)
+alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_medio_de_pago foreign key (envio_mensajeria_medio_pago_id)
         references CARPINCHO_LOVERS.medio_de_pago (medio_pago_id)
 alter table CARPINCHO_LOVERS.estado_mensajeria add constraint fk_estado_mensajeria_nro foreign key (estado_mensajeria_nro)
         references CARPINCHO_LOVERS.envio_mensajeria (envio_mensajeria_nro)
@@ -584,10 +584,10 @@ begin
     (
         select medio_pago_nro_tarjeta,
             (select marca_tarjeta_id from marca_tarjeta where marca_tarjeta_nombre = te.marca_tarjeta),
-            (select tipo_medio_de_pago_id from tipo_medio_de_pago where tipo_medio_pago_descripcion = te.medio_pago_tipo),
+            (select tipo_medio_pago_id from tipo_medio_de_pago where tipo_medio_pago_descripcion = te.medio_pago_tipo),
             (select usuario_id from usuario as ti 
                 where ti.usuario_nombre+ti.usuario_apellido+ti.usuario_dni = te.usuario_nombre+te.usuario_apellido+te.usuario_dni)
-        from gd_esquema.Maestra as te group by USUARIO_DNI,MEDIO_PAGO_NRO_TARJETA,MEDIO_PAGO_TIPO,MARCA_TARJETA 
+        from gd_esquema.Maestra as te group by USUARIO_DNI, usuario_nombre,usuario_apellido,MEDIO_PAGO_NRO_TARJETA,MEDIO_PAGO_TIPO,MARCA_TARJETA 
     )
 end
 
@@ -629,6 +629,7 @@ end
 go
 
 create proc CARPINCHO_LOVERS.migrar_direccion_usuario as
+begin
     insert CARPINCHO_LOVERS.direccion_usuario(direccion_usuario_id, direccion_usuario_nombre, direccion_usuario_direccion, direccion_usuario_localidad)
     (
         select 
