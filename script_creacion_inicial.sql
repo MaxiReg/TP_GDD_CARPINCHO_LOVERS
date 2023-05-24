@@ -99,22 +99,22 @@ create table CARPINCHO_LOVERS.local( -- Done
 create table CARPINCHO_LOVERS.horario( -- Done
     dia_id decimal(18, 0) not null,
     local_id decimal(18, 0) not null,
-    horario_apertura time not null,
-    horario_cierre time not null
+    horario_apertura decimal(18, 0) not null,
+    horario_cierre decimal(18, 0) not null
 )
 
 create table CARPINCHO_LOVERS.dia( -- Done
     dia_id decimal(18, 0) not null identity(1, 1),
-    dia_nombre nvarchar(15)
+    dia_nombre nvarchar(50)
 )
 
-create table CARPINCHO_LOVERS.envio( -- Done
-    envio_id decimal(18, 0) not null identity(1, 1),
-    envio_precio decimal(18, 2) not null,
-    envio_propina decimal(18, 2) not null,
-    envio_direccion_id decimal(18, 0) not null,
-    envio_repartidor_id decimal(18, 0) not null,
-    envio_total decimal(18, 2) not null
+create table CARPINCHO_LOVERS.envio_pedido( -- Done
+    envio_pedido_id decimal(18, 0) not null identity(1, 1),
+    envio_pedido_precio decimal(18, 2) not null,
+    envio_pedido_propina decimal(18, 2) not null,
+    envio_pedido_direccion_id decimal(18, 0) not null,
+    envio_pedido_repartidor_id decimal(18, 0) not null,
+    envio_pedido_total decimal(18, 2) not null
 )
 
 create table CARPINCHO_LOVERS.pedido( -- Done
@@ -322,7 +322,7 @@ alter table CARPINCHO_LOVERS.pedido add constraint pk_pedido primary key (pedido
 alter table CARPINCHO_LOVERS.estado_pedido add constraint pk_estado_pedido primary key (estado_pedido_id)
 alter table CARPINCHO_LOVERS.estado_posible_pedido add constraint pk_estado_posible_pedido primary key (epp_id)
 alter table CARPINCHO_LOVERS.producto_pedido add constraint pk_producto_pedido primary key (producto_pedido_producto_id, producto_pedido_local_id, producto_pedido_codigo)
-alter table CARPINCHO_LOVERS.envio add constraint pk_envio primary key (envio_id)
+alter table CARPINCHO_LOVERS.envio add constraint pk_envio_pedido primary key (envio_pedido_id)
 alter table CARPINCHO_LOVERS.reclamo add constraint pk_reclamo primary key (reclamo_nro)
 alter table CARPINCHO_LOVERS.estado_reclamo add constraint pk_estado_reclamo primary key (estado_reclamo_id)
 alter table CARPINCHO_LOVERS.estado_posible_reclamo add constraint pk_estado_posible_reclamo primary key (epr_id)
@@ -376,9 +376,9 @@ alter table CARPINCHO_LOVERS.horario add constraint fk_horario_dia foreign key (
         references CARPINCHO_LOVERS.dia (dia_id)
 alter table CARPINCHO_LOVERS.horario add constraint fk_horario_local foreign key (local_id)
         references CARPINCHO_LOVERS.local (local_id)
-alter table CARPINCHO_LOVERS.envio add constraint fk_envio_direccion foreign key (envio_direccion_id)
+alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_direccion foreign key (envio_pedido_direccion_id)
         references CARPINCHO_LOVERS.direccion_usuario (direccion_id)
-alter table CARPINCHO_LOVERS.envio add constraint fk_envio_repartidor foreign key (envio_repartidor_id)
+alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_repartidor foreign key (envio_pedido_repartidor_id)
         references CARPINCHO_LOVERS.repartidor (repartidor_id)
 alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_local foreign key (pedido_local_id)
         references CARPINCHO_LOVERS.local (local_id)
@@ -640,5 +640,69 @@ begin
             (select localidad_id from localidad where localidad_nombre = DIRECCION_USUARIO_LOCALIDAD)
         from gd_esquema.Maestra as te group by usuario_nombre, usuario_apellido, usuario_dni, DIRECCION_USUARIO_NOMBRE, 
         DIRECCION_USUARIO_DIRECCION, DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA
+    )
+end
+GO
+
+create proc CARPINCHO_LOVERS.migrar_operador_reclamo as
+begin
+    insert CARPINCHO_LOVERS.operador_reclamo(operador_reclamo_nombre, operador_reclamo_apellido, operador_reclamo_dni, operador_reclamo_telefono, operador_reclamo_direccion, operador_reclamo_mail, operador_reclamo_fecha_nac)
+    (
+        select OPERADOR_RECLAMO_NOMBRE, OPERADOR_RECLAMO_APELLIDO, OPERADOR_RECLAMO_DNI, OPERADOR_RECLAMO_TELEFONO, OPERADOR_RECLAMO_DIRECCION, OPERADOR_RECLAMO_MAIL, OPERADOR_RECLAMO_FECHA_NAC
+        from gd_esquema.Maestra
+        where OPERADOR_RECLAMO_NOMBRE is not null
+        group by OPERADOR_RECLAMO_NOMBRE, OPERADOR_RECLAMO_APELLIDO, OPERADOR_RECLAMO_DNI, OPERADOR_RECLAMO_TELEFONO, OPERADOR_RECLAMO_DIRECCION, OPERADOR_RECLAMO_MAIL, OPERADOR_RECLAMO_FECHA_NAC -- No se repiten pero seria mas correcto
+    )
+end
+
+GO
+
+create proc CARPINCHO_LOVERS.migrar_repartidor as
+begin
+    insert CARPINCHO_LOVERS.repartidor(repartidor_nombre, repartidor_apellido, repartidor_dni, repartidor_telefono, repartidor_direccion, repartidor_mail, repartidor_fecha_nac) --falta tipo movilidad
+    (
+        select REPARTIDOR_NOMBRE, REPARTIDOR_APELLIDO, REPARTIDOR_DNI, REPARTIDOR_TELEFONO, REPARTIDOR_DIRECION, REPARTIDOR_EMAIL, REPARTIDOR_FECHA_NAC
+        from gd_esquema.Maestra
+        where REPARTIDOR_NOMBRE is not null
+        group by REPARTIDOR_NOMBRE, REPARTIDOR_APELLIDO, REPARTIDOR_DNI, REPARTIDOR_TELEFONO, REPARTIDOR_DIRECION, REPARTIDOR_EMAIL, REPARTIDOR_FECHA_NAC -- No se repiten pero seria mas correcto
+    )
+end
+
+GO
+
+create proc CARPINCHO_LOVERS.migrar_dias as
+begin
+    insert CARPINCHO_LOVERS.dia(dia_nombre)
+    (
+        select HORARIO_LOCAL_DIA
+        from gd_esquema.Maestra
+        where HORARIO_LOCAL_DIA is not null
+        group by HORARIO_LOCAL_DIA
+    )
+end
+
+GO
+
+create proc CARPINCHO_LOVERS.migrar_horario as --FALTA RELACION CON DIA y con el local
+begin
+    insert CARPINCHO_LOVERS.horario(horario_apertura, horario_cierre)
+    (
+        select HORARIO_LOCAL_HORA_APERTURA, HORARIO_LOCAL_HORA_CIERRE
+        from gd_esquema.Maestra
+        where HORARIO_LOCAL_HORA_APERTURA is not null and HORARIO_LOCAL_HORA_CIERRE is not null
+        group by HORARIO_LOCAL_HORA_APERTURA, HORARIO_LOCAL_HORA_CIERRE
+    )
+end
+
+GO
+
+create proc CARPINCHO_LOVERS.migrar_cupon as --FALTA RELACION tipo y usuario. Despues combinar con cupones de reclamo
+begin
+    insert CARPINCHO_LOVERS.cupon(cupon_nro, cupon_monto, cupon_fecha_alta, cupon_fecha_vencimiento)
+    (
+        select CUPON_NRO, CUPON_MONTO, CUPON_ECHA_ALTA, CUPON_FECHA_VENCIMIENTO
+        from gd_esquema.Maestra
+        where CUPON_NRO is not null
+        group by CUPON_NRO, CUPON_MONTO, CUPON_ECHA_ALTA, CUPON_FECHA_VENCIMIENTO
     )
 end

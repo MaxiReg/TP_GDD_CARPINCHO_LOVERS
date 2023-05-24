@@ -56,6 +56,11 @@ drop proc CARPINCHO_LOVERS.migrar_medio_de_pago
 drop proc CARPINCHO_LOVERS.migrar_provincia
 drop proc CARPINCHO_LOVERS.migrar_localidad 
 drop proc CARPINCHO_LOVERS.migrar_direccion_usuario
+drop proc CARPINCHO_LOVERS.migrar_operador_reclamo
+drop proc CARPINCHO_LOVERS.migrar_repartidor
+drop proc CARPINCHO_LOVERS.migrar_dias
+drop proc CARPINCHO_LOVERS.migrar_horario
+drop proc CARPINCHO_LOVERS.migrar_cupon
 
 go
 drop schema CARPINCHO_LOVERS
