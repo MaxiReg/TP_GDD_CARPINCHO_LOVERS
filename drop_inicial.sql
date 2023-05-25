@@ -2,9 +2,7 @@ use GD1C2023
 go
 
 --DROP TABLE
-drop table CARPINCHO_LOVERS.estado_posible_envio
-drop table CARPINCHO_LOVERS.estado_posible_pedido
-drop table CARPINCHO_LOVERS.estado_posible_reclamo
+
 drop table CARPINCHO_LOVERS.cupon_x_pedido
 drop table CARPINCHO_LOVERS.cupon_reclamo
 drop table CARPINCHO_LOVERS.estado_mensajeria
@@ -18,26 +16,28 @@ drop table CARPINCHO_LOVERS.repartidor_x_localidad
 drop table CARPINCHO_LOVERS.cupon
 drop table CARPINCHO_LOVERS.cupon_tipo
 drop table CARPINCHO_LOVERS.dia
-drop table CARPINCHO_LOVERS.envio_mensajeria
 drop table CARPINCHO_LOVERS.local_x_producto
 drop table CARPINCHO_LOVERS.operador_reclamo
 drop table CARPINCHO_LOVERS.paquete
-drop table CARPINCHO_LOVERS.pedido
-drop table CARPINCHO_LOVERS.direccion_envio
 drop table CARPINCHO_LOVERS.envio_pedido
 drop table CARPINCHO_LOVERS.direccion_usuario
-drop table CARPINCHO_LOVERS.local
-drop table CARPINCHO_LOVERS.categoria
-drop table CARPINCHO_LOVERS.medio_de_pago
-drop table CARPINCHO_LOVERS.marca_tarjeta
 drop table CARPINCHO_LOVERS.producto
-drop table CARPINCHO_LOVERS.localidad
-drop table CARPINCHO_LOVERS.provincia
+drop table CARPINCHO_LOVERS.tipo_paquete
+drop table CARPINCHO_LOVERS.envio_mensajeria
+drop table CARPINCHO_LOVERS.estado_posible_envio
+drop table CARPINCHO_LOVERS.pedido
+drop table CARPINCHO_LOVERS.estado_posible_pedido
+drop table CARPINCHO_LOVERS.estado_posible_reclamo
 drop table CARPINCHO_LOVERS.repartidor
 drop table CARPINCHO_LOVERS.movilidad_tipo
+drop table CARPINCHO_LOVERS.local
+drop table CARPINCHO_LOVERS.categoria
 drop table CARPINCHO_LOVERS.tipo_local
+drop table CARPINCHO_LOVERS.localidad
+drop table CARPINCHO_LOVERS.provincia
+drop table CARPINCHO_LOVERS.medio_de_pago
+drop table CARPINCHO_LOVERS.marca_tarjeta
 drop table CARPINCHO_LOVERS.tipo_medio_de_pago
-drop table CARPINCHO_LOVERS.tipo_paquete
 drop table CARPINCHO_LOVERS.usuario
 
 --DROP PROCEDURE
@@ -65,12 +65,23 @@ drop proc CARPINCHO_LOVERS.migrar_productos
 drop proc CARPINCHO_LOVERS.migrar_local
 drop proc CARPINCHO_LOVERS.migrar_local_x_producto
 drop proc CARPINCHO_LOVERS.migrar_pedido
+drop proc CARPINCHO_LOVERS.migrar_cupon_x_pedido
+drop proc CARPINCHO_LOVERS.migrar_reclamo
+drop proc CARPINCHO_LOVERS.migrar_producto_x_pedido
+drop proc CARPINCHO_LOVERS.migrar_envio_pedido
+drop proc CARPINCHO_LOVERS.migrar_envio_mensajeria
+drop proc CARPINCHO_LOVERS.migrar_paquete
 
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_provincia
---drop function CARPINCHO_LOVERS.buscar_local
+drop function CARPINCHO_LOVERS.buscar_local
 drop function CARPINCHO_LOVERS.buscar_localidad
 drop function CARPINCHO_LOVERS.buscar_usuario
+drop function CARPINCHO_LOVERS.buscar_estado_posible_envio
+drop function CARPINCHO_LOVERS.buscar_estado_posible_pedido
+drop function CARPINCHO_LOVERS.buscar_estado_posible_reclamo
+drop function CARPINCHO_LOVERS.buscar_medio_de_pago
+drop function CARPINCHO_LOVERS.buscar_tipo_medio_de_pago
 
 go
 drop schema CARPINCHO_LOVERS
