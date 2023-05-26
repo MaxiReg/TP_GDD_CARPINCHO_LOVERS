@@ -44,7 +44,7 @@ create table CARPINCHO_LOVERS.direccion_usuario(
     direccion_usuario_id decimal(18, 0) not null,
     direccion_usuario_nombre nvarchar(50) not null,
     direccion_usuario_direccion nvarchar(255) not null,
-    direccion_usuario_localidad decimal(18,0) not null
+    direccion_usuario_localidad_id decimal(18, 0) not null
 )
 
 create table CARPINCHO_LOVERS.cupon(
@@ -73,13 +73,13 @@ create table CARPINCHO_LOVERS.cupon_x_pedido(
 
 create table CARPINCHO_LOVERS.localidad(
     localidad_id decimal(18, 0) not null identity(1, 1),
-    localidad_nombre nvarchar(50) not null,
+    localidad_nombre nvarchar(255) not null,
     localidad_provincia_id decimal(18, 0)
 )
 
 create table CARPINCHO_LOVERS.provincia(
     provincia_id decimal(18, 0) not null identity(1, 1),
-    provincia_nombre nvarchar(30) not null
+    provincia_nombre nvarchar(255) not null
 )
 
 create table CARPINCHO_LOVERS.local(
@@ -92,8 +92,8 @@ create table CARPINCHO_LOVERS.local(
 )
 
 create table CARPINCHO_LOVERS.horario(
-    dia_id decimal(18, 0) not null,
-    local_id decimal(18, 0) not null,
+    horario_dia_id decimal(18, 0) not null,
+    horario_local_id decimal(18, 0) not null,
     horario_apertura decimal(18, 0) not null,
     horario_cierre decimal(18, 0) not null
 )
@@ -120,10 +120,10 @@ create table CARPINCHO_LOVERS.pedido(
     pedido_tarifa_servicio decimal(18, 2) not null, 
     pedido_total_cupones decimal(18, 2) not null, 
     pedido_observ nvarchar(255) not null,
-    pedido_fecha datetime2(3) not null,
-    pedido_fecha_entrega datetime2(3) not null,
+    pedido_fecha datetime not null,
+    pedido_fecha_entrega datetime not null,
     pedido_tiempo_estimado_entrega decimal(18, 2) not null,
-    pedido_calificacion decimal(18, 2) not null,
+    pedido_calificacion decimal(18, 0) not null,
     pedido_tipo_medio_pago decimal(18, 0) not null,
     pedido_medio_pago_id decimal(18, 0),
     pedido_total_servicio decimal(18, 2) not null,
@@ -193,7 +193,7 @@ create table CARPINCHO_LOVERS.medio_de_pago(
 
 create table CARPINCHO_LOVERS.marca_tarjeta(
     marca_tarjeta_id decimal(18, 0) not null identity(1,1),
-    marca_tarjeta_nombre nvarchar(50) not null
+    marca_tarjeta_nombre nvarchar(100) not null
 )
 
 create table CARPINCHO_LOVERS.tipo_medio_de_pago(
@@ -299,7 +299,7 @@ alter table CARPINCHO_LOVERS.local add constraint pk_local primary key (local_id
 alter table CARPINCHO_LOVERS.categoria add constraint pk_categoria primary key (categoria_id)
 alter table CARPINCHO_LOVERS.tipo_local add constraint pk_tipo_local primary key (tipo_local_id)
 alter table CARPINCHO_LOVERS.dia add constraint pk_dia primary key (dia_id)
-alter table CARPINCHO_LOVERS.horario add constraint pk_horario primary key (dia_id, local_id)
+alter table CARPINCHO_LOVERS.horario add constraint pk_horario primary key (horario_dia_id, horario_local_id)
 alter table CARPINCHO_LOVERS.producto add constraint pk_producto primary key (producto_codigo)
 alter table CARPINCHO_LOVERS.local_x_producto add constraint pk_local_x_producto primary key (producto_codigo, local_id)
 alter table CARPINCHO_LOVERS.repartidor add constraint pk_repartidor primary key (repartidor_id)
@@ -330,7 +330,7 @@ alter table CARPINCHO_LOVERS.cupon_reclamo add constraint pk_cupon_reclamo prima
 
 alter table CARPINCHO_LOVERS.direccion_usuario add constraint fk_direccion_usuario_usuario foreign key (direccion_usuario_id)
         references CARPINCHO_LOVERS.usuario (usuario_id)
-alter table CARPINCHO_LOVERS.direccion_usuario add constraint fk_direccion_usuario_localidad foreign key (direccion_usuario_localidad)
+alter table CARPINCHO_LOVERS.direccion_usuario add constraint fk_direccion_usuario_localidad_id foreign key (direccion_usuario_localidad_id)
         references CARPINCHO_LOVERS.localidad (localidad_id)
 alter table CARPINCHO_LOVERS.localidad add constraint fk_localidad_provincia foreign key (localidad_provincia_id)
         references CARPINCHO_LOVERS.provincia (provincia_id)
@@ -356,9 +356,9 @@ alter table CARPINCHO_LOVERS.local add constraint fk_local_localidad foreign key
         references CARPINCHO_LOVERS.localidad (localidad_id)
 alter table CARPINCHO_LOVERS.local add constraint fk_local_categoria foreign key (local_categoria_id)
         references CARPINCHO_LOVERS.categoria (categoria_id)
-alter table CARPINCHO_LOVERS.horario add constraint fk_horario_dia foreign key (dia_id)
+alter table CARPINCHO_LOVERS.horario add constraint fk_horario_dia foreign key (horario_dia_id)
         references CARPINCHO_LOVERS.dia (dia_id)
-alter table CARPINCHO_LOVERS.horario add constraint fk_horario_local foreign key (local_id)
+alter table CARPINCHO_LOVERS.horario add constraint fk_horario_local foreign key (horario_local_id)
         references CARPINCHO_LOVERS.local (local_id)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_direccion foreign key (envio_pedido_direccion_id)
         references CARPINCHO_LOVERS.direccion_usuario (direccion_id)
@@ -435,7 +435,7 @@ go
 
 ------------------------------------------------- FUNCIONES -------------------------------------------------
 
-create FUNCTION CARPINCHO_LOVERS.buscar_provincia (@provincia_nombre nvarchar(30)) returns decimal(18,0)
+create FUNCTION CARPINCHO_LOVERS.buscar_provincia (@provincia_nombre nvarchar(255)) returns decimal(18,0)
 AS
 BEGIN
     RETURN
@@ -457,7 +457,7 @@ END
 
 go
 
-create FUNCTION CARPINCHO_LOVERS.buscar_localidad (@provincia_nombre nvarchar(30), @localidad_nombre nvarchar(50)) returns decimal(18,0)
+create FUNCTION CARPINCHO_LOVERS.buscar_localidad (@provincia_nombre nvarchar(255), @localidad_nombre nvarchar(255)) returns decimal(18,0)
 AS
 BEGIN
     RETURN
@@ -516,7 +516,7 @@ END
 
 GO
 
-CREATE function CARPINCHO_LOVERS.buscar_medio_de_pago(@usuario_id decimal(18,0), @tarjeta_nro nvarchar(50), @tarjeta_marca nvarchar(100)) RETURNS decimal(18,0)
+CREATE function CARPINCHO_LOVERS.buscar_medio_de_pago(@usuario_id decimal(18,0), @tarjeta_nro nvarchar(50), @tarjeta_marca decimal(18,0)) RETURNS decimal(18,0)
 AS
 BEGIN
     RETURN
@@ -556,14 +556,14 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_direccion_usuario as
 begin
-    insert CARPINCHO_LOVERS.direccion_usuario(direccion_usuario_id, direccion_usuario_nombre, direccion_usuario_direccion, direccion_usuario_localidad)
+    insert CARPINCHO_LOVERS.direccion_usuario(direccion_usuario_id, direccion_usuario_nombre, direccion_usuario_direccion, direccion_usuario_localidad_id)
     (
         select 
             CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO),
-            DIRECCION_USUARIO_NOMBRE, direccion_usuario_direccion,
+            DIRECCION_USUARIO_NOMBRE, DIRECCION_USUARIO_DIRECCION,
             CARPINCHO_LOVERS.buscar_localidad(DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA)
-        from gd_esquema.Maestra as te group by usuario_nombre, usuario_apellido, usuario_dni, DIRECCION_USUARIO_NOMBRE, 
-            DIRECCION_USUARIO_DIRECCION, DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA
+        from gd_esquema.Maestra as te group by te.USUARIO_NOMBRE, te.USUARIO_APELLIDO, te.USUARIO_DNI, te.DIRECCION_USUARIO_NOMBRE, 
+            te.DIRECCION_USUARIO_DIRECCION, te.DIRECCION_USUARIO_LOCALIDAD, te.DIRECCION_USUARIO_PROVINCIA
     )
 end
 go
@@ -574,15 +574,21 @@ begin
     (
         select ENVIO_MENSAJERIA_LOCALIDAD,
                 CARPINCHO_LOVERS.buscar_provincia(ENVIO_MENSAJERIA_PROVINCIA)
-            from gd_esquema.Maestra group by ENVIO_MENSAJERIA_LOCALIDAD, ENVIO_MENSAJERIA_PROVINCIA
+            from gd_esquema.Maestra 
+			where ENVIO_MENSAJERIA_LOCALIDAD is not null
+			group by ENVIO_MENSAJERIA_LOCALIDAD, ENVIO_MENSAJERIA_PROVINCIA
         union
         select DIRECCION_USUARIO_LOCALIDAD,
                 CARPINCHO_LOVERS.buscar_provincia(DIRECCION_USUARIO_PROVINCIA)
-            from gd_esquema.Maestra group by DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA
+            from gd_esquema.Maestra 
+			where DIRECCION_USUARIO_LOCALIDAD is not null
+			group by DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA
         union
         select LOCAL_LOCALIDAD,
                 CARPINCHO_LOVERS.buscar_provincia( LOCAL_PROVINCIA)
-            from gd_esquema.Maestra group by LOCAL_LOCALIDAD, LOCAL_PROVINCIA
+            from gd_esquema.Maestra 
+			where LOCAL_LOCALIDAD is not null
+			group by LOCAL_LOCALIDAD, LOCAL_PROVINCIA
     )
 end
 go
@@ -605,11 +611,11 @@ create proc CARPINCHO_LOVERS.migrar_medio_de_pago as
 begin
     insert CARPINCHO_LOVERS.medio_de_pago(medio_pago_nro_tarjeta, medio_pago_tipo, medio_pago_marca_tarjeta, medio_pago_usuario_id)
     (
-        select medio_pago_nro_tarjeta,
-            (select marca_tarjeta_id from marca_tarjeta where marca_tarjeta_nombre = te.marca_tarjeta),
-            (select tipo_medio_pago_id from tipo_medio_de_pago where tipo_medio_pago_descripcion = te.medio_pago_tipo),
+        select MEDIO_PAGO_NRO_TARJETA,
+			CARPINCHO_LOVERS.buscar_tipo_medio_de_pago(MEDIO_PAGO_TIPO),
+            (select marca_tarjeta_id from marca_tarjeta as ti where ti.marca_tarjeta_nombre = te.marca_tarjeta),
             CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO)
-        from gd_esquema.Maestra as te group by USUARIO_DNI, usuario_nombre,usuario_apellido,MEDIO_PAGO_NRO_TARJETA,MEDIO_PAGO_TIPO,MARCA_TARJETA 
+        from gd_esquema.Maestra as te group by USUARIO_DNI, usuario_nombre, usuario_apellido, MEDIO_PAGO_NRO_TARJETA,MEDIO_PAGO_TIPO,MARCA_TARJETA 
     )
 end
 go
@@ -636,7 +642,7 @@ create proc CARPINCHO_LOVERS.migrar_repartidor as
 begin
     insert CARPINCHO_LOVERS.repartidor(repartidor_nombre, repartidor_apellido, repartidor_dni, repartidor_telefono, repartidor_direccion, repartidor_email, repartidor_fecha_nac, repartidor_tipo_movilidad)
     (
-        select REPARTIDOR_NOMBRE, REPARTIDOR_APELLIDO, REPARTIDOR_DNI, REPARTIDOR_TELEFONO, REPARTIDOR_DIRECION, REPARTIDOR_EMAIL, REPARTIDOR_FECHA_NAC, (select movilidad_tipo_id from CARPINCHO_LOVERS.tipo_movilidad where movilidad_tipo_descripcion = REPARTIDOR_TIPO_MOVILIDAD)
+        select REPARTIDOR_NOMBRE, REPARTIDOR_APELLIDO, REPARTIDOR_DNI, REPARTIDOR_TELEFONO, REPARTIDOR_DIRECION, REPARTIDOR_EMAIL, REPARTIDOR_FECHA_NAC, (select movilidad_tipo_id from CARPINCHO_LOVERS.movilidad_tipo where movilidad_tipo_descripcion = REPARTIDOR_TIPO_MOVILIDAD)
         from gd_esquema.Maestra
         where REPARTIDOR_NOMBRE is not null
         group by REPARTIDOR_NOMBRE, REPARTIDOR_APELLIDO, REPARTIDOR_DNI, REPARTIDOR_TELEFONO, REPARTIDOR_DIRECION, REPARTIDOR_EMAIL, REPARTIDOR_FECHA_NAC, REPARTIDOR_TIPO_MOVILIDAD -- No se repiten pero seria mas correcto
@@ -696,6 +702,7 @@ BEGIN
     insert CARPINCHO_LOVERS.producto(producto_codigo, producto_nombre, producto_descripcion)
     (
         select PRODUCTO_LOCAL_CODIGO, PRODUCTO_LOCAL_NOMBRE, PRODUCTO_LOCAL_DESCRIPCION from gd_esquema.Maestra
+		where PRODUCTO_LOCAL_CODIGO is not null
         group by PRODUCTO_LOCAL_CODIGO, PRODUCTO_LOCAL_NOMBRE, PRODUCTO_LOCAL_DESCRIPCION
     )
 end
@@ -707,7 +714,9 @@ BEGIN
     (
         SELECT LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION,
             CARPINCHO_LOVERS.buscar_localidad(LOCAL_PROVINCIA, LOCAL_LOCALIDAD)
-        from gd_esquema.Maestra group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, LOCAL_PROVINCIA, LOCAL_LOCALIDAD
+        from gd_esquema.Maestra 
+		where LOCAL_NOMBRE is not null
+		group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, LOCAL_PROVINCIA, LOCAL_LOCALIDAD
     )
 end
 go
@@ -737,7 +746,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_horario as
 begin
-    insert CARPINCHO_LOVERS.horario(horario_apertura, horario_cierre, dia_id, local_id)
+    insert CARPINCHO_LOVERS.horario(horario_apertura, horario_cierre, horario_dia_id, horario_local_id)
     (
         select HORARIO_LOCAL_HORA_APERTURA, HORARIO_LOCAL_HORA_CIERRE,
             (select dia_id from CARPINCHO_LOVERS.dia where dia_nombre = HORARIO_LOCAL_DIA),
@@ -756,7 +765,9 @@ BEGIN
         SELECT PRODUCTO_LOCAL_CODIGO,
             CARPINCHO_LOVERS.buscar_local(LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION),
             producto_local_precio
-        from gd_esquema.Maestra group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, PRODUCTO_LOCAL_CODIGO, PRODUCTO_LOCAL_PRECIO
+        from gd_esquema.Maestra 
+		where PRODUCTO_LOCAL_CODIGO is not null
+		group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, PRODUCTO_LOCAL_CODIGO, PRODUCTO_LOCAL_PRECIO
     )
 end
 
@@ -971,4 +982,30 @@ begin
             group by PAQUETE_TIPO, PAQUETE_ALTO_MAX, PAQUETE_ANCHO_MAX, PAQUETE_LARGO_MAX, PAQUETE_PESO_MAX, PAQUETE_TIPO_PRECIO
     )
 end
+
 go
+
+------------------------------------------------- EXECUTE PROCEDURES -------------------------------------------------
+
+exec CARPINCHO_LOVERS.migrar_tipo_local 
+exec CARPINCHO_LOVERS.migrar_provincia 
+exec CARPINCHO_LOVERS.migrar_localidad 
+exec CARPINCHO_LOVERS.migrar_usuarios 
+exec CARPINCHO_LOVERS.migrar_local
+--exec CARPINCHO_LOVERS.migrar_direccion_usuario --Error converting data type nvarchar to numeric
+exec CARPINCHO_LOVERS.migrar_dias
+--exec CARPINCHO_LOVERS.migrar_horario -- Violation of PRIMARY KEY constraint 'pk_horario'. Cannot insert duplicate key in object 'CARPINCHO_LOVERS.horario'. The duplicate key value is (1, 3).
+exec CARPINCHO_LOVERS.migrar_productos
+exec CARPINCHO_LOVERS.migrar_local_x_producto
+exec CARPINCHO_LOVERS.migrar_marca_tarjeta
+exec CARPINCHO_LOVERS.migrar_tipo_medio_de_pago
+--exec CARPINCHO_LOVERS.migrar_medio_de_pago --Error converting data type nvarchar to numeric.
+exec CARPINCHO_LOVERS.migrar_estado_posible_pedido
+exec CARPINCHO_LOVERS.migrar_estado_posible_envio
+exec CARPINCHO_LOVERS.migrar_estado_posible_reclamo
+exec CARPINCHO_LOVERS.migrar_tipo_movilidad
+exec CARPINCHO_LOVERS.migrar_repartidor
+exec CARPINCHO_LOVERS.migrar_operador_reclamo
+exec CARPINCHO_LOVERS.migrar_reclamo_tipo
+exec CARPINCHO_LOVERS.migrar_tipo_cupon
+exec CARPINCHO_LOVERS.migrar_tipo_paquete
