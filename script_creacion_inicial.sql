@@ -13,7 +13,7 @@ create table CARPINCHO_LOVERS.usuario(
     usuario_telefono decimal(18, 0) not null,
     usuario_mail nvarchar(255) not null,
     usuario_fecha_nac date not null,
-    usuario_fecha_registro datetime not null
+    usuario_fecha_registro datetime2(3) not null
 )
 
 create table CARPINCHO_LOVERS.repartidor(
@@ -48,7 +48,7 @@ create table CARPINCHO_LOVERS.direccion_usuario(
 )
 
 create table CARPINCHO_LOVERS.cupon(
-    cupon_nro decimal(18, 0) not null identity(1, 1),
+    cupon_nro decimal(18, 0) not null,
     cupon_monto decimal(18, 2) not null,
     cupon_fecha_alta datetime not null,
     cupon_fecha_vencimiento datetime not null,
@@ -88,10 +88,12 @@ create table CARPINCHO_LOVERS.local(
     local_descripcion nvarchar(255) not null,
     local_direccion nvarchar(255) not null,
     local_localidad decimal(18, 0) not null,
-    local_categoria_id decimal(18, 0)
+    local_categoria decimal(18, 0),
+    local_tipo decimal(18,0)
 )
 
 create table CARPINCHO_LOVERS.horario(
+    horario_id decimal(18, 0) not null identity(1, 1),
     horario_dia_id decimal(18, 0) not null,
     horario_local_id decimal(18, 0) not null,
     horario_apertura decimal(18, 0) not null,
@@ -111,7 +113,7 @@ create table CARPINCHO_LOVERS.envio_pedido(
 )
 
 create table CARPINCHO_LOVERS.pedido(
-    pedido_nro decimal(18, 0) not null identity(1, 1),
+    pedido_nro decimal(18, 0) not null,
     pedido_local_id decimal(18, 0) not null,
     pedido_usuario_id decimal(18, 0) not null, 
     pedido_total_productos decimal(18, 2) not null,
@@ -143,10 +145,10 @@ create table CARPINCHO_LOVERS.estado_posible_pedido(
 )
 
 create table CARPINCHO_LOVERS.reclamo(
-    reclamo_nro decimal(18, 0) not null identity(1,1),
-    reclamo_fecha datetime2(3) not null,
+    reclamo_nro decimal(18, 0) not null,
+    reclamo_fecha datetime not null,
     reclamo_descripcion nvarchar(255) not null,
-    reclamo_fecha_solucion datetime2(3) not null,
+    reclamo_fecha_solucion datetime not null,
     reclamo_solucion nvarchar(255) not null,
     reclamo_calificacion decimal(18, 0) not null,
     reclamo_estado decimal(18, 0) not null,
@@ -207,7 +209,7 @@ create table CARPINCHO_LOVERS.producto(
     producto_descripcion nvarchar(255)
 )
 
-create table CARPINCHO_LOVERS.producto_pedido(
+create table CARPINCHO_LOVERS.producto_x_pedido(
     producto_pedido_producto_id nvarchar(50) not null,
     producto_pedido_local_id decimal(18, 0) not null,
     producto_pedido_codigo decimal(18, 0) not null,
@@ -249,7 +251,7 @@ create table CARPINCHO_LOVERS.tipo_paquete(
 )
 
 create table CARPINCHO_LOVERS.envio_mensajeria(
-    envio_mensajeria_nro decimal(18 ,0) not null identity(1, 1),
+    envio_mensajeria_nro decimal(18 ,0) not null,
     envio_mensajeria_localidad_origen decimal(18 ,0) not null,
     envio_mensajeria_localidad_destino decimal(18 ,0) not null,
     envio_mensajeria_direccion_origen nvarchar(255) not null,
@@ -299,7 +301,7 @@ alter table CARPINCHO_LOVERS.local add constraint pk_local primary key (local_id
 alter table CARPINCHO_LOVERS.categoria add constraint pk_categoria primary key (categoria_id)
 alter table CARPINCHO_LOVERS.tipo_local add constraint pk_tipo_local primary key (tipo_local_id)
 alter table CARPINCHO_LOVERS.dia add constraint pk_dia primary key (dia_id)
-alter table CARPINCHO_LOVERS.horario add constraint pk_horario primary key (horario_dia_id, horario_local_id)
+alter table CARPINCHO_LOVERS.horario add constraint pk_horario primary key (horario_id)
 alter table CARPINCHO_LOVERS.producto add constraint pk_producto primary key (producto_codigo)
 alter table CARPINCHO_LOVERS.local_x_producto add constraint pk_local_x_producto primary key (producto_codigo, local_id)
 alter table CARPINCHO_LOVERS.repartidor add constraint pk_repartidor primary key (repartidor_id)
@@ -308,7 +310,7 @@ alter table CARPINCHO_LOVERS.repartidor_x_localidad add constraint pk_repartidor
 alter table CARPINCHO_LOVERS.pedido add constraint pk_pedido primary key (pedido_nro)
 alter table CARPINCHO_LOVERS.estado_pedido add constraint pk_estado_pedido primary key (estado_pedido_id)
 alter table CARPINCHO_LOVERS.estado_posible_pedido add constraint pk_estado_posible_pedido primary key (epp_id)
-alter table CARPINCHO_LOVERS.producto_pedido add constraint pk_producto_pedido primary key (producto_pedido_producto_id, producto_pedido_local_id, producto_pedido_codigo)
+alter table CARPINCHO_LOVERS.producto_x_pedido add constraint pk_producto_pedido primary key (producto_pedido_producto_id, producto_pedido_local_id, producto_pedido_codigo)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint pk_envio_pedido primary key (envio_pedido_id)
 alter table CARPINCHO_LOVERS.reclamo add constraint pk_reclamo primary key (reclamo_nro)
 alter table CARPINCHO_LOVERS.estado_reclamo add constraint pk_estado_reclamo primary key (estado_reclamo_id)
@@ -354,8 +356,10 @@ alter table CARPINCHO_LOVERS.cupon_x_pedido add constraint fk_cupon_x_pedido_ped
         references CARPINCHO_LOVERS.pedido (pedido_nro)
 alter table CARPINCHO_LOVERS.local add constraint fk_local_localidad foreign key (local_localidad)
         references CARPINCHO_LOVERS.localidad (localidad_id)
-alter table CARPINCHO_LOVERS.local add constraint fk_local_categoria foreign key (local_categoria_id)
+alter table CARPINCHO_LOVERS.local add constraint fk_local_categoria foreign key (local_categoria)
         references CARPINCHO_LOVERS.categoria (categoria_id)
+alter table CARPINCHO_LOVERS.local add constraint fk_local_tipo foreign key (local_tipo)
+        references CARPINCHO_LOVERS.tipo_local (tipo_local_id)
 alter table CARPINCHO_LOVERS.horario add constraint fk_horario_dia foreign key (horario_dia_id)
         references CARPINCHO_LOVERS.dia (dia_id)
 alter table CARPINCHO_LOVERS.horario add constraint fk_horario_local foreign key (horario_local_id)
@@ -398,9 +402,9 @@ alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_marca
         references CARPINCHO_LOVERS.marca_tarjeta (marca_tarjeta_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_usuario foreign key (medio_pago_usuario_id)
         references CARPINCHO_LOVERS.usuario (usuario_id)
-alter table CARPINCHO_LOVERS.producto_pedido add constraint fk_producto_pedido_producto_y_local foreign key (producto_pedido_producto_id, producto_pedido_local_id)
+alter table CARPINCHO_LOVERS.producto_x_pedido add constraint fk_producto_pedido_producto_y_local foreign key (producto_pedido_producto_id, producto_pedido_local_id)
         references CARPINCHO_LOVERS.local_x_producto (producto_codigo, local_id)
-alter table CARPINCHO_LOVERS.producto_pedido add constraint fk_producto_pedido_pedido foreign key (producto_pedido_codigo)
+alter table CARPINCHO_LOVERS.producto_x_pedido add constraint fk_producto_pedido_pedido foreign key (producto_pedido_codigo)
         references CARPINCHO_LOVERS.pedido (pedido_nro)
 alter table CARPINCHO_LOVERS.local_x_producto add constraint fk_local_x_producto_producto foreign key (producto_codigo)
         references CARPINCHO_LOVERS.producto (producto_codigo)
@@ -516,13 +520,13 @@ END
 
 GO
 
-CREATE function CARPINCHO_LOVERS.buscar_medio_de_pago(@usuario_id decimal(18,0), @tarjeta_nro nvarchar(50), @tarjeta_marca decimal(18,0)) RETURNS decimal(18,0)
+CREATE function CARPINCHO_LOVERS.buscar_medio_de_pago(@usuario_id decimal(18,0), @tarjeta_nro nvarchar(50), @tarjeta_marca nvarchar(100)) RETURNS decimal(18,0)
 AS
 BEGIN
     RETURN
     (
         select medio_pago_id from CARPINCHO_LOVERS.medio_de_pago
-        where medio_pago_nro_tarjeta = @tarjeta_nro and medio_pago_marca_tarjeta = @tarjeta_marca and medio_pago_usuario_id = @usuario_id
+        where medio_pago_nro_tarjeta = @tarjeta_nro and medio_pago_marca_tarjeta = CARPINCHO_LOVERS.buscar_marca_tarjeta(@tarjeta_marca) and medio_pago_usuario_id = @usuario_id
     )
 END
 go
@@ -532,14 +536,34 @@ AS
 BEGIN
     RETURN
     (
-        select tipo_medio_pago_id from tipo_medio_de_pago where tipo_medio_pago_descripcion = @medio_pago
+        select tipo_medio_pago_id from CARPINCHO_LOVERS.tipo_medio_de_pago where tipo_medio_pago_descripcion = @medio_pago
     )
 END
-    
+go
 
-------------------------------------------------- PROCEDURES -------------------------------------------------
+CREATE function CARPINCHO_LOVERS.buscar_marca_tarjeta(@marca_tarjeta nvarchar(100)) RETURNS decimal(18,0)
+AS
+BEGIN
+    RETURN
+    (
+        select marca_tarjeta_id from CARPINCHO_LOVERS.marca_tarjeta where marca_tarjeta_nombre = @marca_tarjeta
+    )
+END
 
 go
+
+CREATE function CARPINCHO_LOVERS.buscar_tipo_cupon(@cupon_tipo nvarchar(100)) RETURNS decimal(18,0)
+AS
+BEGIN
+    RETURN
+    (
+        select cupon_tipo_id from CARPINCHO_LOVERS.cupon_tipo where cupon_tipo_descripcion = @cupon_tipo
+    )
+END
+
+go
+------------------------------------------------- PROCEDURES -------------------------------------------------
+
 create proc CARPINCHO_LOVERS.migrar_usuarios as
 begin 
     insert CARPINCHO_LOVERS.usuario (usuario_nombre, usuario_apellido, usuario_dni, usuario_fecha_registro,
@@ -614,7 +638,7 @@ begin
     (
         select MEDIO_PAGO_NRO_TARJETA,
 			CARPINCHO_LOVERS.buscar_tipo_medio_de_pago(MEDIO_PAGO_TIPO),
-            (select marca_tarjeta_id from marca_tarjeta as ti where ti.marca_tarjeta_nombre = te.marca_tarjeta),
+            CARPINCHO_LOVERS.buscar_marca_tarjeta(MARCA_TARJETA),
             CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO)
         from gd_esquema.Maestra as te group by USUARIO_DNI, usuario_nombre, usuario_apellido, MEDIO_PAGO_NRO_TARJETA,MEDIO_PAGO_TIPO,MARCA_TARJETA 
     )
@@ -660,16 +684,44 @@ begin
 end
 go
 
-create proc CARPINCHO_LOVERS.migrar_cupon as -- FALTA combinar con cupones de reclamo y ver asignacion de cupones (a quien le corresponde)
+create proc CARPINCHO_LOVERS.migrar_cupon as
 begin
     insert CARPINCHO_LOVERS.cupon(cupon_nro, cupon_monto, cupon_fecha_alta, cupon_fecha_vencimiento, cupon_tipo, cupon_usuario_id)
     (
-        select CUPON_NRO, CUPON_MONTO, CUPON_FECHA_ALTA, CUPON_FECHA_VENCIMIENTO,
-            (select cupon_tipo_id from CARPINCHO_LOVERS.tipo_cupon where cupon_tipo_descripcion = CUPON_TIPO),
-            CARPINCHO_LOVERS.buscar_usuario(USUAIRO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO)
+       select CUPON_NRO, CUPON_MONTO, CUPON_FECHA_ALTA, CUPON_FECHA_VENCIMIENTO,
+            CARPINCHO_LOVERS.buscar_tipo_cupon(CUPON_TIPO),
+            CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO)
         from gd_esquema.Maestra
         where CUPON_NRO is not null
-        group by CUPON_NRO, CUPON_MONTO, CUPON_FECHA_ALTA, CUPON_FECHA_VENCIMIENTO
+        group by CUPON_NRO, CUPON_MONTO, CUPON_FECHA_ALTA, CUPON_FECHA_VENCIMIENTO,
+             CUPON_TIPO, USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO
+    )
+end
+go
+
+
+create proc CARPINCHO_LOVERS.migrar_cupon_reclamo as
+begin
+    --Primero migramos los cupones de reclamo que no aun no fueron utilizados (osea que no tienen un cupon normal con su mismo codigo)
+    insert CARPINCHO_LOVERS.cupon(cupon_nro, cupon_monto, cupon_fecha_alta, cupon_fecha_vencimiento, cupon_tipo, cupon_usuario_id)
+    (
+        SELECT 
+            t1.CUPON_RECLAMO_NRO
+            ,t1.CUPON_RECLAMO_MONTO
+            ,t1.CUPON_RECLAMO_FECHA_ALTA
+            ,t1.CUPON_RECLAMO_FECHA_VENCIMIENTO
+            ,CARPINCHO_LOVERS.buscar_tipo_cupon(t1.CUPON_RECLAMO_TIPO)
+            ,CARPINCHO_LOVERS.buscar_usuario(t1.USUARIO_DNI, t1.USUARIO_NOMBRE, t1.USUARIO_APELLIDO)
+        FROM gd_esquema.Maestra as t1 left join gd_esquema.Maestra as t2 on t2.CUPON_NRO = t1.CUPON_RECLAMO_NRO
+        where t1.CUPON_RECLAMO_NRO is not null and t2.CUPON_NRO is null
+    )
+    --Ahora  migramos la relacion entre un cupon y su reclamo
+    insert CARPINCHO_LOVERS.cupon_reclamo(cupon_reclamo_reclamo_nro, cupon_reclamo_nro)
+    (
+        select RECLAMO_NRO, CUPON_RECLAMO_NRO
+        from gd_esquema.Maestra
+        where CUPON_RECLAMO_NRO is not null
+        group by RECLAMO_NRO, CUPON_RECLAMO_NRO
     )
 end
 
@@ -711,13 +763,14 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_local as
 BEGIN
-    insert CARPINCHO_LOVERS.local(local_nombre, local_descripcion, local_direccion, local_localidad)
+    insert CARPINCHO_LOVERS.local(local_nombre, local_descripcion, local_direccion, local_localidad, local_tipo)
     (
         SELECT LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION,
-            CARPINCHO_LOVERS.buscar_localidad(LOCAL_PROVINCIA, LOCAL_LOCALIDAD)
+            CARPINCHO_LOVERS.buscar_localidad(LOCAL_PROVINCIA, LOCAL_LOCALIDAD),
+            (select tipo_local_id from CARPINCHO_LOVERS.tipo_local where tipo_local_descripcion = LOCAL_TIPO)
         from gd_esquema.Maestra 
 		where LOCAL_NOMBRE is not null
-		group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, LOCAL_PROVINCIA, LOCAL_LOCALIDAD
+		group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, LOCAL_PROVINCIA, LOCAL_LOCALIDAD, LOCAL_TIPO
     )
 end
 go
@@ -781,7 +834,7 @@ BEGIN
         select RECLAMO_NRO, RECLAMO_FECHA, RECLAMO_DESCRIPCION, RECLAMO_FECHA_SOLUCION, RECLAMO_SOLUCION, RECLAMO_CALIFICACION,
             (select reclamo_tipo_id from CARPINCHO_LOVERS.reclamo_tipo where reclamo_tipo_descripcion = RECLAMO_TIPO),
             pedido_nro,
-            (select operador_reclamo_id from CARPINCHO_LOVERS.operador_reclamo as ti where ti.operador_reclamo_nombre + ti.operador_reclamo_apellido + ti.operador_reclamo_dni = te.operador_reclamo_nombre + te.operador_reclamo_apellido + te.operador_reclamo_dni),
+            (select operador_reclamo_id from CARPINCHO_LOVERS.operador_reclamo as ti where ti.operador_reclamo_nombre + ti.operador_reclamo_apellido = te.operador_reclamo_nombre + te.operador_reclamo_apellido and ti.operador_reclamo_dni = te.operador_reclamo_dni),
             CARPINCHO_LOVERS.buscar_estado_posible_reclamo(RECLAMO_ESTADO)
         from gd_esquema.Maestra as te
         where RECLAMO_NRO is not null
@@ -860,11 +913,13 @@ BEGIN
         pedido_tiempo_estimado_entrega,
         pedido_calificacion,
         CARPINCHO_LOVERS.buscar_tipo_medio_de_pago(MEDIO_PAGO_TIPO),
-        CARPINCHO_LOVERS.buscar_medio_de_pago(CARPINCHO_LOVERS.buscar_usuario(usuario_dni, usuario_nombre, usuario_apellido), MEDIO_PAGO_NRO_TARJETA, marca_tarjeta),
+        CARPINCHO_LOVERS.buscar_medio_de_pago(CARPINCHO_LOVERS.buscar_usuario(usuario_dni, usuario_nombre, usuario_apellido), MEDIO_PAGO_NRO_TARJETA, MARCA_TARJETA),
         pedido_total_servicio,
         CARPINCHO_LOVERS.buscar_estado_posible_pedido(pedido_estado)
 
-        from gd_esquema.Maestra group by pedido_nro, LOCAL_NOMBRE,LOCAL_DESCRIPCION, LOCAL_DIRECCION,
+        from gd_esquema.Maestra 
+        where PEDIDO_NRO is not null
+        group by pedido_nro, LOCAL_NOMBRE,LOCAL_DESCRIPCION, LOCAL_DIRECCION,
             usuario_dni, usuario_nombre, usuario_apellido, pedido_total_productos, pedido_precio_envio,
             pedido_propina, pedido_tarifa_servicio, pedido_total_cupones, pedido_observ,
             pedido_fecha, pedido_fecha_entrega, pedido_tiempo_estimado_entrega, pedido_calificacion, MEDIO_PAGO_TIPO,
@@ -891,11 +946,11 @@ BEGIN
         PRODUCTO_LOCAL_CODIGO,
         CARPINCHO_LOVERS.buscar_local(LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION),
         pedido_nro,
-        PRODUCTO_CANTIDAD,
+        sum(PRODUCTO_CANTIDAD),
         PRODUCTO_LOCAL_PRECIO
         from gd_esquema.Maestra
         where PRODUCTO_LOCAL_CODIGO is not null
-        Group by LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION, PRODUCTO_LOCAL_CODIGO, PEDIDO_NRO, PRODUCTO_CANTIDAD, PRODUCTO_LOCAL_PRECIO
+        Group by LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION, PRODUCTO_LOCAL_CODIGO, PEDIDO_NRO, PRODUCTO_LOCAL_PRECIO
     )
 END
 GO
@@ -904,8 +959,8 @@ create proc CARPINCHO_LOVERS.migrar_envio_pedido AS
 BEGIN
     insert CARPINCHO_LOVERS.envio_pedido(envio_pedido_direccion_id, envio_pedido_repartidor_id, envio_pedido_nro)
     (
-        SELECT (select direccion_id from direccion_usuario as ti where ti.direccion_usuario_direccion = te.DIRECCION_USUARIO_DIRECCION),
-        (select repartidor_id from CARPINCHO_LOVERS.repartidor as ti where ti.repartidor_dni + ti.repartidor_nombre + ti.repartidor_apellido = te.REPARTIDOR_DNI + te.REPARTIDOR_NOMBRE + te.REPARTIDOR_APELLIDO),
+        SELECT (select direccion_id from direccion_usuario  where direccion_usuario_direccion = te.DIRECCION_USUARIO_DIRECCION),
+        (select repartidor_id from CARPINCHO_LOVERS.repartidor as ti where ti.repartidor_dni = te.REPARTIDOR_DNI and ti.repartidor_nombre + ti.repartidor_apellido =  te.REPARTIDOR_NOMBRE + te.REPARTIDOR_APELLIDO),
         pedido_nro
         from gd_esquema.Maestra as te
         where PEDIDO_NRO is not null
@@ -943,8 +998,8 @@ BEGIN
         ENVIO_MENSAJERIA_CALIFICACION,
         CARPINCHO_LOVERS.buscar_tipo_medio_de_pago(MEDIO_PAGO_TIPO),
         CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO),
-        (select repartidor_id from CARPINCHO_LOVERS.repartidor as ti where ti.repartidor_dni + ti.repartidor_nombre + ti.repartidor_apellido = te.REPARTIDOR_DNI + te.REPARTIDOR_NOMBRE + te.REPARTIDOR_APELLIDO),
-        CARPINCHO_LOVERS.buscar_medio_de_pago(CARPINCHO_LOVERS.buscar_usuario(usuario_dni, usuario_nombre, usuario_apellido), MEDIO_PAGO_NRO_TARJETA, marca_tarjeta),
+        (select repartidor_id from CARPINCHO_LOVERS.repartidor as ti where ti.repartidor_dni = te.REPARTIDOR_DNI and ti.repartidor_nombre + ti.repartidor_apellido =  te.REPARTIDOR_NOMBRE + te.REPARTIDOR_APELLIDO),
+        CARPINCHO_LOVERS.buscar_medio_de_pago(CARPINCHO_LOVERS.buscar_usuario(usuario_dni, usuario_nombre, usuario_apellido), MEDIO_PAGO_NRO_TARJETA, MARCA_TARJETA),
         CARPINCHO_LOVERS.buscar_estado_posible_envio(ENVIO_MENSAJERIA_ESTADO)
         FROM gd_esquema.Maestra as te
         where ENVIO_MENSAJERIA_NRO is not null
@@ -965,7 +1020,8 @@ create proc CARPINCHO_LOVERS.migrar_paquete as
 BEGIN
     insert CARPINCHO_LOVERS.paquete(paquete_tipo_paquete, paquete_envio_mensajeria_nro)
     (
-        select (select tipo_paquete_id from CARPINCHO_LOVERS.tipo_paquete AS ti where ti.tipo_paquete_descripcion = te.PAQUETE_TIPO),
+        select 
+            (select tipo_paquete_id from CARPINCHO_LOVERS.tipo_paquete AS ti where ti.tipo_paquete_descripcion = te.PAQUETE_TIPO),
             ENVIO_MENSAJERIA_NRO
         FROM gd_esquema.Maestra as te
         where envio_mensajeria_nro is not null
@@ -993,14 +1049,14 @@ exec CARPINCHO_LOVERS.migrar_provincia
 exec CARPINCHO_LOVERS.migrar_localidad 
 exec CARPINCHO_LOVERS.migrar_usuarios 
 exec CARPINCHO_LOVERS.migrar_local
-exec CARPINCHO_LOVERS.migrar_direccion_usuario --Error converting data type nvarchar to numeric
+exec CARPINCHO_LOVERS.migrar_direccion_usuario
 exec CARPINCHO_LOVERS.migrar_dias
---exec CARPINCHO_LOVERS.migrar_horario -- Violation of PRIMARY KEY constraint 'pk_horario'. Cannot insert duplicate key in object 'CARPINCHO_LOVERS.horario'. The duplicate key value is (1, 3).
+exec CARPINCHO_LOVERS.migrar_horario
 exec CARPINCHO_LOVERS.migrar_productos
 exec CARPINCHO_LOVERS.migrar_local_x_producto
 exec CARPINCHO_LOVERS.migrar_marca_tarjeta
 exec CARPINCHO_LOVERS.migrar_tipo_medio_de_pago
-exec CARPINCHO_LOVERS.migrar_medio_de_pago --Error converting data type nvarchar to numeric.
+exec CARPINCHO_LOVERS.migrar_medio_de_pago
 exec CARPINCHO_LOVERS.migrar_estado_posible_pedido
 exec CARPINCHO_LOVERS.migrar_estado_posible_envio
 exec CARPINCHO_LOVERS.migrar_estado_posible_reclamo
@@ -1010,3 +1066,12 @@ exec CARPINCHO_LOVERS.migrar_operador_reclamo
 exec CARPINCHO_LOVERS.migrar_reclamo_tipo
 exec CARPINCHO_LOVERS.migrar_tipo_cupon
 exec CARPINCHO_LOVERS.migrar_tipo_paquete
+exec CARPINCHO_LOVERS.migrar_pedido
+exec CARPINCHO_LOVERS.migrar_envio_mensajeria
+exec CARPINCHO_LOVERS.migrar_envio_pedido
+exec CARPINCHO_LOVERS.migrar_reclamo
+exec CARPINCHO_LOVERS.migrar_producto_x_pedido
+exec CARPINCHO_LOVERS.migrar_cupon
+exec CARPINCHO_LOVERS.migrar_cupon_reclamo
+exec CARPINCHO_LOVERS.migrar_paquete
+exec CARPINCHO_LOVERS.migrar_cupon_x_pedido

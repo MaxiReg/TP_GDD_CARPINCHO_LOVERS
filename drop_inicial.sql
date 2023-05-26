@@ -9,7 +9,7 @@ drop table CARPINCHO_LOVERS.estado_mensajeria
 drop table CARPINCHO_LOVERS.estado_pedido
 drop table CARPINCHO_LOVERS.estado_reclamo
 drop table CARPINCHO_LOVERS.horario
-drop table CARPINCHO_LOVERS.producto_pedido
+drop table CARPINCHO_LOVERS.producto_x_pedido
 drop table CARPINCHO_LOVERS.reclamo
 drop table CARPINCHO_LOVERS.reclamo_tipo
 drop table CARPINCHO_LOVERS.repartidor_x_localidad
@@ -71,6 +71,7 @@ drop proc CARPINCHO_LOVERS.migrar_producto_x_pedido
 drop proc CARPINCHO_LOVERS.migrar_envio_pedido
 drop proc CARPINCHO_LOVERS.migrar_envio_mensajeria
 drop proc CARPINCHO_LOVERS.migrar_paquete
+drop proc CARPINCHO_LOVERS.migrar_cupon_reclamo
 
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_provincia
@@ -82,6 +83,8 @@ drop function CARPINCHO_LOVERS.buscar_estado_posible_pedido
 drop function CARPINCHO_LOVERS.buscar_estado_posible_reclamo
 drop function CARPINCHO_LOVERS.buscar_medio_de_pago
 drop function CARPINCHO_LOVERS.buscar_tipo_medio_de_pago
+drop function CARPINCHO_LOVERS.buscar_marca_tarjeta
+drop function CARPINCHO_LOVERS.buscar_tipo_cupon
 
 go
 drop schema CARPINCHO_LOVERS
