@@ -36,7 +36,7 @@ create table CARPINCHO_LOVERS.repartidor_x_localidad(
 
 create table CARPINCHO_LOVERS.movilidad_tipo(
     movilidad_tipo_id decimal(18,0) not null identity(1,1),
-    movilidad_tipo_descripcion nvarchar(50)    
+    movilidad_tipo_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.direccion_usuario(
@@ -74,7 +74,7 @@ create table CARPINCHO_LOVERS.cupon_x_pedido(
 create table CARPINCHO_LOVERS.localidad(
     localidad_id decimal(18, 0) not null identity(1, 1),
     localidad_nombre nvarchar(255) not null,
-    localidad_provincia_id decimal(18, 0)
+    localidad_provincia_id decimal(18, 0) not null
 )
 
 create table CARPINCHO_LOVERS.provincia(
@@ -89,7 +89,7 @@ create table CARPINCHO_LOVERS.local(
     local_direccion nvarchar(255) not null,
     local_localidad decimal(18, 0) not null,
     local_categoria decimal(18, 0),
-    local_tipo decimal(18,0)
+    local_tipo decimal(18,0) not null
 )
 
 create table CARPINCHO_LOVERS.horario(
@@ -102,7 +102,7 @@ create table CARPINCHO_LOVERS.horario(
 
 create table CARPINCHO_LOVERS.dia(
     dia_id decimal(18, 0) not null identity(1, 1),
-    dia_nombre nvarchar(50)
+    dia_nombre nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.envio_pedido(
@@ -159,7 +159,7 @@ create table CARPINCHO_LOVERS.reclamo(
 
 create table CARPINCHO_LOVERS.reclamo_tipo(
     reclamo_tipo_id decimal(18,0) not null identity(1,1),
-    reclamo_tipo_descripcion nvarchar(50)
+    reclamo_tipo_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.estado_reclamo(
@@ -206,7 +206,7 @@ create table CARPINCHO_LOVERS.tipo_medio_de_pago(
 create table CARPINCHO_LOVERS.producto(
     producto_codigo nvarchar(50) not null,
     producto_nombre nvarchar(50) not null,
-    producto_descripcion nvarchar(255)
+    producto_descripcion nvarchar(255) not null
 )
 
 create table CARPINCHO_LOVERS.producto_x_pedido(
@@ -220,7 +220,7 @@ create table CARPINCHO_LOVERS.producto_x_pedido(
 create table CARPINCHO_LOVERS.local_x_producto(
     producto_codigo nvarchar(50) not null,
     local_id decimal(18,0) not null,
-    producto_local_precio decimal(18,2)
+    producto_local_precio decimal(18,2) not null
 )
 
 create table CARPINCHO_LOVERS.categoria(
@@ -231,7 +231,7 @@ create table CARPINCHO_LOVERS.categoria(
 
 create table CARPINCHO_LOVERS.tipo_local(
     tipo_local_id decimal(18,0) not null identity(1,1),
-    tipo_local_descripcion nvarchar(100)
+    tipo_local_descripcion nvarchar(100) not null
 )
 
 create table CARPINCHO_LOVERS.paquete(
@@ -862,6 +862,7 @@ begin
       group by RECLAMO_TIPO   
     )
 end
+
 go
 
 create proc CARPINCHO_LOVERS.migrar_operador_reclamo as
@@ -875,19 +876,8 @@ begin
         group by OPERADOR_RECLAMO_NOMBRE, OPERADOR_RECLAMO_APELLIDO, OPERADOR_RECLAMO_DNI, OPERADOR_RECLAMO_TELEFONO, OPERADOR_RECLAMO_DIRECCION, OPERADOR_RECLAMO_MAIL, OPERADOR_RECLAMO_FECHA_NAC
     )
 end
-go
-
--- REPARTIDOR X LOCALIDAD
-/*create proc CARPINCHO_LOVERS.migrar_repartidor_x_localidad AS
-BEGIN
-    insert CARPINCHO_LOVERS.repartidor_x_localidad(localidad_id, es_activa)
-    (
-        
-    )
-END*/
 
 go
-
 
 create proc CARPINCHO_LOVERS.migrar_pedido as
 BEGIN
@@ -926,6 +916,7 @@ BEGIN
             medio_pago_nro_tarjeta, MARCA_TARJETA, pedido_total_servicio, pedido_estado
     )
 end
+
 go
 
 create proc CARPINCHO_LOVERS.migrar_estado_posible_pedido as
@@ -935,6 +926,7 @@ begin
         select PEDIDO_ESTADO from gd_esquema.Maestra where PEDIDO_ESTADO is not null group by PEDIDO_ESTADO
     )
 end
+
 go
 
 create proc CARPINCHO_LOVERS.migrar_producto_x_pedido as
@@ -952,8 +944,9 @@ BEGIN
         where PRODUCTO_LOCAL_CODIGO is not null
         Group by LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION, PRODUCTO_LOCAL_CODIGO, PEDIDO_NRO, PRODUCTO_LOCAL_PRECIO
     )
-END
-GO
+end
+
+go
 
 create proc CARPINCHO_LOVERS.migrar_envio_pedido AS
 BEGIN
