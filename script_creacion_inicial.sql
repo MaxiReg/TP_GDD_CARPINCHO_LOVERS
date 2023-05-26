@@ -475,7 +475,7 @@ BEGIN
     RETURN
     (
         select usuario_id from CARPINCHO_LOVERS.usuario
-        where usuario_dni + usuario_nombre + usuario_apellido = @usuario_dni + @usuario_nombre + @usuario_apellido
+        where usuario_dni = @usuario_dni and usuario_nombre + usuario_apellido = @usuario_nombre + @usuario_apellido
     )
 END 
 go
@@ -561,9 +561,10 @@ begin
         select 
             CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO),
             DIRECCION_USUARIO_NOMBRE, DIRECCION_USUARIO_DIRECCION,
-            CARPINCHO_LOVERS.buscar_localidad(DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA)
-        from gd_esquema.Maestra as te group by te.USUARIO_NOMBRE, te.USUARIO_APELLIDO, te.USUARIO_DNI, te.DIRECCION_USUARIO_NOMBRE, 
-            te.DIRECCION_USUARIO_DIRECCION, te.DIRECCION_USUARIO_LOCALIDAD, te.DIRECCION_USUARIO_PROVINCIA
+            CARPINCHO_LOVERS.buscar_localidad(DIRECCION_USUARIO_PROVINCIA, DIRECCION_USUARIO_LOCALIDAD)
+        from gd_esquema.Maestra where DIRECCION_USUARIO_LOCALIDAD is not null
+        group by USUARIO_NOMBRE, USUARIO_APELLIDO, USUARIO_DNI, DIRECCION_USUARIO_NOMBRE, 
+            DIRECCION_USUARIO_DIRECCION, DIRECCION_USUARIO_LOCALIDAD, DIRECCION_USUARIO_PROVINCIA
     )
 end
 go
@@ -992,14 +993,14 @@ exec CARPINCHO_LOVERS.migrar_provincia
 exec CARPINCHO_LOVERS.migrar_localidad 
 exec CARPINCHO_LOVERS.migrar_usuarios 
 exec CARPINCHO_LOVERS.migrar_local
---exec CARPINCHO_LOVERS.migrar_direccion_usuario --Error converting data type nvarchar to numeric
+exec CARPINCHO_LOVERS.migrar_direccion_usuario --Error converting data type nvarchar to numeric
 exec CARPINCHO_LOVERS.migrar_dias
 --exec CARPINCHO_LOVERS.migrar_horario -- Violation of PRIMARY KEY constraint 'pk_horario'. Cannot insert duplicate key in object 'CARPINCHO_LOVERS.horario'. The duplicate key value is (1, 3).
 exec CARPINCHO_LOVERS.migrar_productos
 exec CARPINCHO_LOVERS.migrar_local_x_producto
 exec CARPINCHO_LOVERS.migrar_marca_tarjeta
 exec CARPINCHO_LOVERS.migrar_tipo_medio_de_pago
---exec CARPINCHO_LOVERS.migrar_medio_de_pago --Error converting data type nvarchar to numeric.
+exec CARPINCHO_LOVERS.migrar_medio_de_pago --Error converting data type nvarchar to numeric.
 exec CARPINCHO_LOVERS.migrar_estado_posible_pedido
 exec CARPINCHO_LOVERS.migrar_estado_posible_envio
 exec CARPINCHO_LOVERS.migrar_estado_posible_reclamo
