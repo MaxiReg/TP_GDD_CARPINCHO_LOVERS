@@ -5,9 +5,9 @@ go
 
 drop table CARPINCHO_LOVERS.cupon_x_pedido
 drop table CARPINCHO_LOVERS.cupon_reclamo
-drop table CARPINCHO_LOVERS.estado_mensajeria
-drop table CARPINCHO_LOVERS.estado_pedido
-drop table CARPINCHO_LOVERS.estado_reclamo
+drop table CARPINCHO_LOVERS.trazabilidad_envio_mensajeria
+drop table CARPINCHO_LOVERS.trazabilidad_pedido
+drop table CARPINCHO_LOVERS.trazabilidad_reclamo
 drop table CARPINCHO_LOVERS.horario
 drop table CARPINCHO_LOVERS.producto_x_pedido
 drop table CARPINCHO_LOVERS.reclamo
@@ -24,10 +24,10 @@ drop table CARPINCHO_LOVERS.direccion_usuario
 drop table CARPINCHO_LOVERS.producto
 drop table CARPINCHO_LOVERS.tipo_paquete
 drop table CARPINCHO_LOVERS.envio_mensajeria
-drop table CARPINCHO_LOVERS.estado_posible_envio
+drop table CARPINCHO_LOVERS.estado_envio_mensajeria
 drop table CARPINCHO_LOVERS.pedido
-drop table CARPINCHO_LOVERS.estado_posible_pedido
-drop table CARPINCHO_LOVERS.estado_posible_reclamo
+drop table CARPINCHO_LOVERS.estado_pedido 
+drop table CARPINCHO_LOVERS.estado_reclamo 
 drop table CARPINCHO_LOVERS.repartidor
 drop table CARPINCHO_LOVERS.movilidad_tipo
 drop table CARPINCHO_LOVERS.local
@@ -45,9 +45,9 @@ drop proc CARPINCHO_LOVERS.migrar_usuarios
 drop proc CARPINCHO_LOVERS.migrar_tipo_paquete
 drop proc CARPINCHO_LOVERS.migrar_marca_tarjeta
 drop proc CARPINCHO_LOVERS.migrar_tipo_medio_de_pago
-drop proc CARPINCHO_LOVERS.migrar_estado_posible_envio
-drop proc CARPINCHO_LOVERS.migrar_estado_posible_pedido
-drop proc CARPINCHO_LOVERS.migrar_estado_posible_reclamo
+drop proc CARPINCHO_LOVERS.migrar_estado_envio 
+drop proc CARPINCHO_LOVERS.migrar_estado_pedido 
+drop proc CARPINCHO_LOVERS.migrar_estado_reclamo 
 drop proc CARPINCHO_LOVERS.migrar_reclamo_tipo
 drop proc CARPINCHO_LOVERS.migrar_tipo_local
 drop proc CARPINCHO_LOVERS.migrar_tipo_movilidad
@@ -72,15 +72,21 @@ drop proc CARPINCHO_LOVERS.migrar_envio_pedido
 drop proc CARPINCHO_LOVERS.migrar_envio_mensajeria
 drop proc CARPINCHO_LOVERS.migrar_paquete
 drop proc CARPINCHO_LOVERS.migrar_cupon_reclamo
+drop proc CARPINCHO_LOVERS.migrar_trazabilidad_envio_mensajeria
+drop proc CARPINCHO_LOVERS.migrar_trazabilidad_pedido
+drop proc CARPINCHO_LOVERS.migrar_trazabilidad_reclamo
+drop proc CARPINCHO_LOVERS.migrar_repartidor_x_localidad
+drop proc CARPINCHO_LOVERS.migrar_categoria
 
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_provincia
 drop function CARPINCHO_LOVERS.buscar_local
+drop function CARPINCHO_LOVERS.buscar_tipo_local
 drop function CARPINCHO_LOVERS.buscar_localidad
 drop function CARPINCHO_LOVERS.buscar_usuario
-drop function CARPINCHO_LOVERS.buscar_estado_posible_envio
-drop function CARPINCHO_LOVERS.buscar_estado_posible_pedido
-drop function CARPINCHO_LOVERS.buscar_estado_posible_reclamo
+drop function CARPINCHO_LOVERS.buscar_estado_envio_mensajeria
+drop function CARPINCHO_LOVERS.buscar_estado_pedido
+drop function CARPINCHO_LOVERS.buscar_estado_reclamo
 drop function CARPINCHO_LOVERS.buscar_medio_de_pago
 drop function CARPINCHO_LOVERS.buscar_tipo_medio_de_pago
 drop function CARPINCHO_LOVERS.buscar_marca_tarjeta

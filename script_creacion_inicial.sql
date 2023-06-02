@@ -132,16 +132,16 @@ create table CARPINCHO_LOVERS.pedido(
     pedido_estado decimal(18,0) not null
 )
 
-create table CARPINCHO_LOVERS.estado_pedido(
-    estado_pedido_id decimal(18,0) not null identity(1,1),
-    estado_pedido_nro decimal(18,0) not null,
-    estado_pedido_estado decimal(18,0) not null,
-    estado_pedido_fecha datetime not null
+create table CARPINCHO_LOVERS.trazabilidad_pedido(
+    trazabilidad_pedido_id decimal(18,0) not null identity(1,1),
+    trazabilidad_pedido_nro decimal(18,0) not null,
+    trazabilidad_pedido_estado decimal(18,0) not null,
+    trazabilidad_pedido_fecha datetime not null
 )
 
-create table CARPINCHO_LOVERS.estado_posible_pedido(
-    epp_id decimal(18,0) not null identity(1,1),
-    epp_descripcion nvarchar(50) not null
+create table CARPINCHO_LOVERS.estado_pedido(
+    estado_pedido_id decimal(18,0) not null identity(1,1),
+    estado_pedido_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.reclamo(
@@ -162,16 +162,16 @@ create table CARPINCHO_LOVERS.reclamo_tipo(
     reclamo_tipo_descripcion nvarchar(50) not null
 )
 
-create table CARPINCHO_LOVERS.estado_reclamo(
-    estado_reclamo_id decimal(18,0) not null identity(1,1),
-    estado_reclamo_nro decimal(18,0) not null,
-    estado_reclamo_estado decimal(18,0) not null,
-    estado_reclamo_fecha datetime not null
+create table CARPINCHO_LOVERS.trazabilidad_reclamo(
+    trazabilidad_reclamo_id decimal(18,0) not null identity(1,1),
+    trazabilidad_reclamo_nro decimal(18,0) not null,
+    trazabilidad_reclamo_estado decimal(18,0) not null,
+    trazabilidad_reclamo_fecha datetime not null
 )
 
-create table CARPINCHO_LOVERS.estado_posible_reclamo(
-    epr_id decimal(18,0) not null identity(1,1),
-    epr_descripcion nvarchar(50) not null
+create table CARPINCHO_LOVERS.estado_reclamo(
+    estado_reclamo_id decimal(18,0) not null identity(1,1),
+    estado_reclamo_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.operador_reclamo(
@@ -275,16 +275,16 @@ create table CARPINCHO_LOVERS.envio_mensajeria(
     envio_mensajeria_estado decimal(18, 0) not null
 )
 
-create table CARPINCHO_LOVERS.estado_mensajeria(
-    estado_mensajeria_id decimal(18,0) not null identity(1,1),
-    estado_mensajeria_nro decimal(18,0) not null,
-    estado_envio_estado decimal(18,0) not null,
-    estado_mensajeria_fecha datetime not null
+create table CARPINCHO_LOVERS.trazabilidad_envio_mensajeria(
+    trazabilidad_mensajeria_id decimal(18,0) not null identity(1,1),
+    trazabilidad_mensajeria_nro decimal(18,0) not null,
+    trazabilidad_mensajeria_estado decimal(18,0) not null,
+    trazabilidad_mensajeria_fecha datetime not null
 )
 
-create table CARPINCHO_LOVERS.estado_posible_envio( 
-    epe_id decimal(18,0) not null identity(1,1),
-    epe_descripcion nvarchar(50) not null
+create table CARPINCHO_LOVERS.estado_envio_mensajeria( 
+    estado_mensajeria_id decimal(18,0) not null identity(1,1),
+    estado_mensajeria_descripcion nvarchar(50) not null
 )
 go
 
@@ -308,18 +308,18 @@ alter table CARPINCHO_LOVERS.repartidor add constraint pk_repartidor primary key
 alter table CARPINCHO_LOVERS.movilidad_tipo add constraint pk_movilidad_tipo primary key (movilidad_tipo_id)
 alter table CARPINCHO_LOVERS.repartidor_x_localidad add constraint pk_repartidor_x_local primary key (repartidor_id, localidad_id)
 alter table CARPINCHO_LOVERS.pedido add constraint pk_pedido primary key (pedido_nro)
+alter table CARPINCHO_LOVERS.trazabilidad_pedido add constraint pk_trazabilidad_pedido primary key (trazabilidad_pedido_id)
 alter table CARPINCHO_LOVERS.estado_pedido add constraint pk_estado_pedido primary key (estado_pedido_id)
-alter table CARPINCHO_LOVERS.estado_posible_pedido add constraint pk_estado_posible_pedido primary key (epp_id)
 alter table CARPINCHO_LOVERS.producto_x_pedido add constraint pk_producto_pedido primary key (producto_pedido_producto_id, producto_pedido_local_id, producto_pedido_codigo)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint pk_envio_pedido primary key (envio_pedido_id)
 alter table CARPINCHO_LOVERS.reclamo add constraint pk_reclamo primary key (reclamo_nro)
+alter table CARPINCHO_LOVERS.trazabilidad_reclamo add constraint pk_trazabilidad_reclamo primary key (trazabilidad_reclamo_id)
 alter table CARPINCHO_LOVERS.estado_reclamo add constraint pk_estado_reclamo primary key (estado_reclamo_id)
-alter table CARPINCHO_LOVERS.estado_posible_reclamo add constraint pk_estado_posible_reclamo primary key (epr_id)
 alter table CARPINCHO_LOVERS.reclamo_tipo add constraint pk_reclamo_tipo primary key (reclamo_tipo_id)
 alter table CARPINCHO_LOVERS.operador_reclamo add constraint pk_operador_reclamo primary key (operador_reclamo_id)
 alter table CARPINCHO_LOVERS.envio_mensajeria add constraint pk_envio_mensajeria primary key (envio_mensajeria_nro)
-alter table CARPINCHO_LOVERS.estado_mensajeria add constraint pk_estado_mensajeria primary key (estado_mensajeria_id)
-alter table CARPINCHO_LOVERS.estado_posible_envio add constraint pk_estado_posible_envio primary key (epe_id)
+alter table CARPINCHO_LOVERS.trazabilidad_envio_mensajeria add constraint pk_trazabilidad_mensajeria primary key (trazabilidad_mensajeria_id)
+alter table CARPINCHO_LOVERS.estado_envio_mensajeria add constraint pk_estado_mensajeria primary key (estado_mensajeria_id)
 alter table CARPINCHO_LOVERS.paquete add constraint pk_paquete primary key (paquete_id)
 alter table CARPINCHO_LOVERS.tipo_paquete add constraint pk_tipo_paquete primary key (tipo_paquete_id)
 alter table CARPINCHO_LOVERS.cupon add constraint pk_cupon primary key (cupon_nro)
@@ -358,12 +358,12 @@ alter table CARPINCHO_LOVERS.local add constraint fk_local_localidad foreign key
         references CARPINCHO_LOVERS.localidad (localidad_id)
 alter table CARPINCHO_LOVERS.local add constraint fk_local_categoria foreign key (local_categoria)
         references CARPINCHO_LOVERS.categoria (categoria_id)
-alter table CARPINCHO_LOVERS.local add constraint fk_local_tipo foreign key (local_tipo)
-        references CARPINCHO_LOVERS.tipo_local (tipo_local_id)
 alter table CARPINCHO_LOVERS.horario add constraint fk_horario_dia foreign key (horario_dia_id)
         references CARPINCHO_LOVERS.dia (dia_id)
 alter table CARPINCHO_LOVERS.horario add constraint fk_horario_local foreign key (horario_local_id)
         references CARPINCHO_LOVERS.local (local_id)
+alter table CARPINCHO_LOVERS.local add constraint fk_local_tipo foreign key (local_tipo)
+        references CARPINCHO_LOVERS.tipo_local (tipo_local_id)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_direccion foreign key (envio_pedido_direccion_id)
         references CARPINCHO_LOVERS.direccion_usuario (direccion_id)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_repartidor foreign key (envio_pedido_repartidor_id)
@@ -376,26 +376,26 @@ alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_tipo_medio_pago for
         references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_pago_id)
 alter table CARPINCHO_LOVERS.pedido add constraint fk_medio_pago foreign key (pedido_medio_pago_id)
         references CARPINCHO_LOVERS.medio_de_pago (medio_pago_id)
-alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_estado foreign key (pedido_estado)
-        references CARPINCHO_LOVERS.estado_posible_pedido (epp_id)
+alter table CARPINCHO_LOVERS.pedido add constraint fk_pedido_estado_pedido foreign key (pedido_estado)
+        references CARPINCHO_LOVERS.estado_pedido (estado_pedido_id)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_pedido foreign key (envio_pedido_nro)
         references CARPINCHO_LOVERS.pedido (pedido_nro)
-alter table CARPINCHO_LOVERS.estado_pedido add constraint fk_estado_pedido_pedido foreign key (estado_pedido_nro)
+alter table CARPINCHO_LOVERS.trazabilidad_pedido add constraint fk_trazabilidad_pedido_pedido foreign key (trazabilidad_pedido_nro)
         references CARPINCHO_LOVERS.pedido (pedido_nro)
-alter table CARPINCHO_LOVERS.estado_pedido add constraint fk_estado_pedido_estado foreign key (estado_pedido_estado)
-        references CARPINCHO_LOVERS.estado_posible_pedido (epp_id)
+alter table CARPINCHO_LOVERS.trazabilidad_pedido add constraint fk_trazabilidad_pedido_estado foreign key (trazabilidad_pedido_estado)
+        references CARPINCHO_LOVERS.estado_pedido (estado_pedido_id)
 alter table CARPINCHO_LOVERS.reclamo add constraint fk_reclamo_estado foreign key (reclamo_estado)
-        references CARPINCHO_LOVERS.estado_posible_reclamo (epr_id)        
+        references CARPINCHO_LOVERS.estado_reclamo (estado_reclamo_id)        
 alter table CARPINCHO_LOVERS.reclamo add constraint fk_reclamo_tipo foreign key (reclamo_tipo)
         references CARPINCHO_LOVERS.reclamo_tipo (reclamo_tipo_id)
 alter table CARPINCHO_LOVERS.reclamo add constraint fk_reclamo_pedido foreign key (reclamo_pedido_nro)
         references CARPINCHO_LOVERS.pedido (pedido_nro)
 alter table CARPINCHO_LOVERS.reclamo add constraint fk_reclamo_operador foreign key (reclamo_operador_id)
         references CARPINCHO_LOVERS.operador_reclamo (operador_reclamo_id)
-alter table CARPINCHO_LOVERS.estado_reclamo add constraint fk_estado_reclamo_reclamo foreign key (estado_reclamo_nro)
+alter table CARPINCHO_LOVERS.trazabilidad_reclamo add constraint fk_trazabilidad_reclamo foreign key (trazabilidad_reclamo_nro)
         references CARPINCHO_LOVERS.reclamo (reclamo_nro)
-alter table CARPINCHO_LOVERS.estado_reclamo add constraint fk_estado_reclamo_estado foreign key (estado_reclamo_estado)
-        references CARPINCHO_LOVERS.estado_posible_reclamo (epr_id)
+alter table CARPINCHO_LOVERS.trazabilidad_reclamo add constraint fk_trazabilidad_reclamo_estado foreign key (trazabilidad_reclamo_estado)
+        references CARPINCHO_LOVERS.estado_reclamo (estado_reclamo_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_tipo foreign key (medio_pago_tipo)
         references CARPINCHO_LOVERS.tipo_medio_de_pago (tipo_medio_pago_id)
 alter table CARPINCHO_LOVERS.medio_de_pago add constraint fk_medio_de_pago_marca_tarjeta foreign key (medio_pago_marca_tarjeta)
@@ -429,11 +429,11 @@ alter table CARPINCHO_LOVERS.paquete add constraint fk_paquete_envio_mensajeria 
 alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_medio_de_pago foreign key (envio_mensajeria_medio_pago_id)
         references CARPINCHO_LOVERS.medio_de_pago (medio_pago_id)
 alter table CARPINCHO_LOVERS.envio_mensajeria add constraint fk_envio_mensajeria_estado foreign key (envio_mensajeria_estado)
-        references CARPINCHO_LOVERS.estado_posible_envio (epe_id)
-alter table CARPINCHO_LOVERS.estado_mensajeria add constraint fk_estado_mensajeria_nro foreign key (estado_mensajeria_nro)
+        references CARPINCHO_LOVERS.estado_envio_mensajeria (estado_mensajeria_id)
+alter table CARPINCHO_LOVERS.trazabilidad_envio_mensajeria add constraint fk_trazabilidad_envio_mensajeria_nro foreign key (trazabilidad_mensajeria_nro)
         references CARPINCHO_LOVERS.envio_mensajeria (envio_mensajeria_nro)
-alter table CARPINCHO_LOVERS.estado_mensajeria add constraint fk_estado_envio_estado foreign key (estado_envio_estado)
-        references CARPINCHO_LOVERS.estado_posible_envio (epe_id)
+alter table CARPINCHO_LOVERS.trazabilidad_envio_mensajeria add constraint fk_trazabilidad_mensajeria_estado foreign key (trazabilidad_mensajeria_estado)
+        references CARPINCHO_LOVERS.estado_envio_mensajeria (estado_mensajeria_id)
 
 go
 
@@ -484,37 +484,37 @@ BEGIN
 END 
 go
 
-create function CARPINCHO_LOVERS.buscar_estado_posible_envio (@estado nvarchar(50)) RETURNS decimal(18,0)
+create function CARPINCHO_LOVERS.buscar_estado_envio_mensajeria (@estado nvarchar(50)) RETURNS decimal(18,0)
 AS
 BEGIN
     RETURN
     (
-        select epe_id from CARPINCHO_LOVERS.estado_posible_envio
-        where epe_descripcion = @estado
+        select estado_mensajeria_id from CARPINCHO_LOVERS.estado_envio_mensajeria
+        where estado_mensajeria_descripcion = @estado
     )
 END 
 
 go
 
-create function CARPINCHO_LOVERS.buscar_estado_posible_pedido (@estado nvarchar(50)) RETURNS decimal(18,0)
+create function CARPINCHO_LOVERS.buscar_estado_pedido (@estado nvarchar(50)) RETURNS decimal(18,0)
 AS
 BEGIN
     RETURN
     (
-        select epp_id from CARPINCHO_LOVERS.estado_posible_pedido
-        where epp_descripcion = @estado
+        select estado_pedido_id from CARPINCHO_LOVERS.estado_pedido
+        where estado_pedido_descripcion = @estado
     )
 END 
 
 go
 
-create function CARPINCHO_LOVERS.buscar_estado_posible_reclamo (@estado nvarchar(50)) RETURNS decimal(18,0)
+create function CARPINCHO_LOVERS.buscar_estado_reclamo (@estado nvarchar(50)) RETURNS decimal(18,0)
 AS
 BEGIN
     RETURN
     (
-        select epr_id from CARPINCHO_LOVERS.estado_posible_reclamo
-        where epr_descripcion = @estado
+        select estado_reclamo_id from CARPINCHO_LOVERS.estado_reclamo
+        where estado_reclamo_descripcion = @estado
     )
 END
 
@@ -562,6 +562,17 @@ BEGIN
 END
 
 go
+
+CREATE function CARPINCHO_LOVERS.buscar_tipo_local(@local_descripcion nvarchar(100)) RETURNS decimal(18,0)
+AS
+BEGIN
+    RETURN
+    (
+        select tipo_local_id from CARPINCHO_LOVERS.tipo_local where tipo_local_descripcion = @local_descripcion
+    )
+END
+go
+
 ------------------------------------------------- PROCEDURES -------------------------------------------------
 
 create proc CARPINCHO_LOVERS.migrar_usuarios as
@@ -673,6 +684,43 @@ begin
         group by REPARTIDOR_NOMBRE, REPARTIDOR_APELLIDO, REPARTIDOR_DNI, REPARTIDOR_TELEFONO, REPARTIDOR_DIRECION, REPARTIDOR_EMAIL, REPARTIDOR_FECHA_NAC, REPARTIDOR_TIPO_MOVILIDAD -- No se repiten pero seria mas correcto
     )
 end
+
+go
+
+/*
+Para cada repartidor se fija si su ultima fecha de entrega de un pedido es menor que su ultima fecha de entrega
+de un envio de mensajeria y en funcion de cual de los dos sea el ultimo busca lo localidad correspondiente.
+*/
+create proc CARPINCHO_LOVERS.migrar_repartidor_x_localidad as
+begin
+    insert CARPINCHO_LOVERS.repartidor_x_localidad(repartidor_id, localidad_id, es_activa)
+    (
+        select 
+            repartidor_id,
+            case 
+                when  (SELECT max([PEDIDO_FECHA_ENTREGA]) FROM [gd_esquema].[Maestra] 
+                    as ti where ti.[REPARTIDOR_NOMBRE] + ti.[REPARTIDOR_APELLIDO] =
+                    te.repartidor_nombre + te.repartidor_apellido and  + ti.[REPARTIDOR_DNI] = te.repartidor_dni AND [PEDIDO_FECHA_ENTREGA] IS NOT NULL) >= 
+                    (SELECT max([ENVIO_MENSAJERIA_FECHA_ENTREGA]) FROM [gd_esquema].[Maestra] 
+                    as ti where ti.[REPARTIDOR_NOMBRE] + ti.[REPARTIDOR_APELLIDO] =
+                    te.repartidor_nombre + te.repartidor_apellido and ti.[REPARTIDOR_DNI] = te.repartidor_dni AND [ENVIO_MENSAJERIA_FECHA_ENTREGA] IS NOT NULL)
+                        then 
+                    (select top 1 CARPINCHO_LOVERS.buscar_localidad(LOCAL_PROVINCIA, LOCAL_LOCALIDAD) FROM [GD1C2023].[gd_esquema].[Maestra] as ti
+                        where ti.[REPARTIDOR_NOMBRE]+ti.[REPARTIDOR_APELLIDO] = te.[REPARTIDOR_NOMBRE]+te.[REPARTIDOR_APELLIDO] and ti.[REPARTIDOR_DNI] = te.[REPARTIDOR_DNI]
+                        order by [PEDIDO_FECHA_ENTREGA] desc)
+
+                else
+                    (select top 1 CARPINCHO_LOVERS.buscar_localidad([ENVIO_MENSAJERIA_PROVINCIA], [ENVIO_MENSAJERIA_LOCALIDAD]) FROM [GD1C2023].[gd_esquema].[Maestra] as ti
+                        where ti.[REPARTIDOR_NOMBRE]+ti.[REPARTIDOR_APELLIDO] = te.[REPARTIDOR_NOMBRE]+te.[REPARTIDOR_APELLIDO] and ti.[REPARTIDOR_DNI] = te.[REPARTIDOR_DNI]
+                        order by [ENVIO_MENSAJERIA_FECHA_ENTREGA] desc)
+				end,
+            1
+                
+        from CARPINCHO_LOVERS.repartidor as te
+    )
+end
+
+
 go
 
 create proc CARPINCHO_LOVERS.migrar_tipo_movilidad as
@@ -775,6 +823,17 @@ BEGIN
 end
 go
 
+create proc CARPINCHO_LOVERS.migrar_categoria as
+begin 
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Parrilla', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Restaurante'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Heladeria', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Restaurante'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Comida Rapida', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Restaurante'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Minimercado', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Kiosco', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Supermercado', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
+end
+go
+
 create proc CARPINCHO_LOVERS.migrar_tipo_local as
 begin 
     insert CARPINCHO_LOVERS.tipo_local(tipo_local_descripcion)
@@ -835,16 +894,19 @@ BEGIN
             (select reclamo_tipo_id from CARPINCHO_LOVERS.reclamo_tipo where reclamo_tipo_descripcion = RECLAMO_TIPO),
             pedido_nro,
             (select operador_reclamo_id from CARPINCHO_LOVERS.operador_reclamo as ti where ti.operador_reclamo_nombre + ti.operador_reclamo_apellido = te.operador_reclamo_nombre + te.operador_reclamo_apellido and ti.operador_reclamo_dni = te.operador_reclamo_dni),
-            CARPINCHO_LOVERS.buscar_estado_posible_reclamo(RECLAMO_ESTADO)
+            CARPINCHO_LOVERS.buscar_estado_reclamo(RECLAMO_ESTADO)
         from gd_esquema.Maestra as te
         where RECLAMO_NRO is not null
     )
 end
 go
 
-create proc CARPINCHO_LOVERS.migrar_estado_posible_reclamo as
-begin 
-    insert CARPINCHO_LOVERS.estado_posible_reclamo(epr_descripcion)
+create proc CARPINCHO_LOVERS.migrar_estado_reclamo as
+begin
+    insert into CARPINCHO_LOVERS.estado_reclamo(estado_reclamo_descripcion) values ('Estado Reclamo En Revision')
+    insert into CARPINCHO_LOVERS.estado_reclamo(estado_reclamo_descripcion) values ('Estado Reclamo Solucionado')
+    insert into CARPINCHO_LOVERS.estado_reclamo(estado_reclamo_descripcion) values ('Estado Reclamo Iniciado')
+    insert CARPINCHO_LOVERS.estado_reclamo(estado_reclamo_descripcion) -- Migra Estado Mensajeria Entregado
     (
         select RECLAMO_ESTADO from gd_esquema.Maestra
         where RECLAMO_ESTADO is not null 
@@ -905,7 +967,7 @@ BEGIN
         CARPINCHO_LOVERS.buscar_tipo_medio_de_pago(MEDIO_PAGO_TIPO),
         CARPINCHO_LOVERS.buscar_medio_de_pago(CARPINCHO_LOVERS.buscar_usuario(usuario_dni, usuario_nombre, usuario_apellido), MEDIO_PAGO_NRO_TARJETA, MARCA_TARJETA),
         pedido_total_servicio,
-        CARPINCHO_LOVERS.buscar_estado_posible_pedido(pedido_estado)
+        CARPINCHO_LOVERS.buscar_estado_pedido(pedido_estado)
 
         from gd_esquema.Maestra 
         where PEDIDO_NRO is not null
@@ -919,9 +981,15 @@ end
 
 go
 
-create proc CARPINCHO_LOVERS.migrar_estado_posible_pedido as
+create proc CARPINCHO_LOVERS.migrar_estado_pedido as
 begin
-    insert CARPINCHO_LOVERS.estado_posible_pedido(epp_descripcion)
+    insert into CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) values ('Estado Pedido Realizado')
+    insert into CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) values ('Estado Pedido Confirmado')
+    insert into CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) values ('Estado Pedido En Preparacion')
+    insert into CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) values ('Estado Pedido En Camino')
+    insert into CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) values ('Estado Pedido Entregado')
+    insert into CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) values ('Estado Pedido Cancelado')
+    insert CARPINCHO_LOVERS.estado_pedido(estado_pedido_descripcion) -- Migra solo Estado Mensajeria Entregado y Estado Mensajeria Cancelado
     (
         select PEDIDO_ESTADO from gd_esquema.Maestra where PEDIDO_ESTADO is not null group by PEDIDO_ESTADO
     )
@@ -993,19 +1061,26 @@ BEGIN
         CARPINCHO_LOVERS.buscar_usuario(USUARIO_DNI, USUARIO_NOMBRE, USUARIO_APELLIDO),
         (select repartidor_id from CARPINCHO_LOVERS.repartidor as ti where ti.repartidor_dni = te.REPARTIDOR_DNI and ti.repartidor_nombre + ti.repartidor_apellido =  te.REPARTIDOR_NOMBRE + te.REPARTIDOR_APELLIDO),
         CARPINCHO_LOVERS.buscar_medio_de_pago(CARPINCHO_LOVERS.buscar_usuario(usuario_dni, usuario_nombre, usuario_apellido), MEDIO_PAGO_NRO_TARJETA, MARCA_TARJETA),
-        CARPINCHO_LOVERS.buscar_estado_posible_envio(ENVIO_MENSAJERIA_ESTADO)
+        CARPINCHO_LOVERS.buscar_estado_envio_mensajeria(ENVIO_MENSAJERIA_ESTADO)
         FROM gd_esquema.Maestra as te
         where ENVIO_MENSAJERIA_NRO is not null
     )
 end
 go
 
-create proc CARPINCHO_LOVERS.migrar_estado_posible_envio as
+create proc CARPINCHO_LOVERS.migrar_estado_envio as
 begin
-    insert CARPINCHO_LOVERS.estado_posible_envio(epe_descripcion)
+    insert CARPINCHO_LOVERS.estado_envio_mensajeria(estado_mensajeria_descripcion)
     (
         select ENVIO_MENSAJERIA_ESTADO from gd_esquema.Maestra where ENVIO_MENSAJERIA_ESTADO is not null group by ENVIO_MENSAJERIA_ESTADO
     )
+    -- estado envio mensajeria Migra solo 'Estado Mensajeria Entregado'
+    insert into CARPINCHO_LOVERS.estado_envio_mensajeria(estado_mensajeria_descripcion) values ('Estado Mensajeria Realizado')
+    insert into CARPINCHO_LOVERS.estado_envio_mensajeria(estado_mensajeria_descripcion) values ('Estado Mensajeria Confirmado')
+    insert into CARPINCHO_LOVERS.estado_envio_mensajeria(estado_mensajeria_descripcion) values ('Estado Mensajeria En Camino Origen')
+    insert into CARPINCHO_LOVERS.estado_envio_mensajeria(estado_mensajeria_descripcion) values ('Estado Mensajeria En Camino Destino')
+    insert into CARPINCHO_LOVERS.estado_envio_mensajeria(estado_mensajeria_descripcion) values ('Estado Mensajeria Cancelado')
+    
 end
 go
 
@@ -1032,6 +1107,55 @@ begin
             group by PAQUETE_TIPO, PAQUETE_ALTO_MAX, PAQUETE_ANCHO_MAX, PAQUETE_LARGO_MAX, PAQUETE_PESO_MAX, PAQUETE_TIPO_PRECIO
     )
 end
+go
+
+create proc CARPINCHO_LOVERS.migrar_trazabilidad_reclamo as
+begin
+    insert CARPINCHO_LOVERS.trazabilidad_reclamo(trazabilidad_reclamo_estado, trazabilidad_reclamo_nro, trazabilidad_reclamo_fecha)
+    (
+        select CARPINCHO_LOVERS.buscar_estado_reclamo('Estado Reclamo Iniciado'), reclamo_nro, reclamo_fecha from gd_esquema.Maestra
+        where RECLAMO_NRO is not null
+        union
+        select CARPINCHO_LOVERS.buscar_estado_reclamo('Estado Reclamo Solucionado'), reclamo_nro, reclamo_fecha_solucion from gd_esquema.Maestra
+        where RECLAMO_NRO is not null
+    )
+end
+go
+
+create proc CARPINCHO_LOVERS.migrar_trazabilidad_pedido as
+begin
+    insert CARPINCHO_LOVERS.trazabilidad_pedido(trazabilidad_pedido_estado, trazabilidad_pedido_nro, trazabilidad_pedido_fecha)
+    (
+        select CARPINCHO_LOVERS.buscar_estado_pedido('Estado Pedido Realizado'), pedido_nro, pedido_fecha from gd_esquema.Maestra
+        where PEDIDO_NRO is not null
+        union
+        select case 
+                    when PEDIDO_ESTADO = 'Estado Mensajeria Entregado' then CARPINCHO_LOVERS.buscar_estado_pedido('Estado Pedido Entregado')
+                    when PEDIDO_ESTADO = 'Estado Mensajeria Cancelado' then CARPINCHO_LOVERS.buscar_estado_pedido('Estado Pedido Cancelado')
+                end,
+                pedido_nro,
+                pedido_fecha_entrega
+        from gd_esquema.Maestra
+        where PEDIDO_NRO is not null
+    )
+end
+
+go
+
+create proc CARPINCHO_LOVERS.migrar_trazabilidad_envio_mensajeria as
+begin
+    insert CARPINCHO_LOVERS.trazabilidad_envio_mensajeria(trazabilidad_mensajeria_estado, trazabilidad_mensajeria_nro, trazabilidad_mensajeria_fecha)
+    (
+        select CARPINCHO_LOVERS.buscar_estado_envio_mensajeria('Estado Mensajeria Realizado'), envio_mensajeria_nro, envio_mensajeria_fecha from gd_esquema.Maestra
+        where ENVIO_MENSAJERIA_NRO is not null
+        union
+        select CARPINCHO_LOVERS.buscar_estado_envio_mensajeria(ENVIO_MENSAJERIA_ESTADO),
+                envio_mensajeria_nro,
+                envio_mensajeria_fecha_entrega
+        from gd_esquema.Maestra
+        where ENVIO_MENSAJERIA_NRO is not null
+    )
+end
 
 go
 
@@ -1050,9 +1174,9 @@ exec CARPINCHO_LOVERS.migrar_local_x_producto
 exec CARPINCHO_LOVERS.migrar_marca_tarjeta
 exec CARPINCHO_LOVERS.migrar_tipo_medio_de_pago
 exec CARPINCHO_LOVERS.migrar_medio_de_pago
-exec CARPINCHO_LOVERS.migrar_estado_posible_pedido
-exec CARPINCHO_LOVERS.migrar_estado_posible_envio
-exec CARPINCHO_LOVERS.migrar_estado_posible_reclamo
+exec CARPINCHO_LOVERS.migrar_estado_pedido
+exec CARPINCHO_LOVERS.migrar_estado_envio
+exec CARPINCHO_LOVERS.migrar_estado_reclamo
 exec CARPINCHO_LOVERS.migrar_tipo_movilidad
 exec CARPINCHO_LOVERS.migrar_repartidor
 exec CARPINCHO_LOVERS.migrar_operador_reclamo
@@ -1068,3 +1192,8 @@ exec CARPINCHO_LOVERS.migrar_cupon
 exec CARPINCHO_LOVERS.migrar_cupon_reclamo
 exec CARPINCHO_LOVERS.migrar_paquete
 exec CARPINCHO_LOVERS.migrar_cupon_x_pedido
+exec CARPINCHO_LOVERS.migrar_categoria
+exec CARPINCHO_LOVERS.migrar_trazabilidad_envio_mensajeria
+exec CARPINCHO_LOVERS.migrar_trazabilidad_pedido
+exec CARPINCHO_LOVERS.migrar_trazabilidad_reclamo
+exec CARPINCHO_LOVERS.migrar_repartidor_x_localidad
