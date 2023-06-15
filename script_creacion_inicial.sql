@@ -88,8 +88,7 @@ create table CARPINCHO_LOVERS.local(
     local_descripcion nvarchar(255) not null,
     local_direccion nvarchar(255) not null,
     local_localidad decimal(18, 0) not null,
-    local_categoria decimal(18, 0),
-    local_tipo decimal(18,0) not null
+    local_categoria decimal(18, 0) not null
 )
 
 create table CARPINCHO_LOVERS.horario(
@@ -362,8 +361,6 @@ alter table CARPINCHO_LOVERS.horario add constraint fk_horario_dia foreign key (
         references CARPINCHO_LOVERS.dia (dia_id)
 alter table CARPINCHO_LOVERS.horario add constraint fk_horario_local foreign key (horario_local_id)
         references CARPINCHO_LOVERS.local (local_id)
-alter table CARPINCHO_LOVERS.local add constraint fk_local_tipo foreign key (local_tipo)
-        references CARPINCHO_LOVERS.tipo_local (tipo_local_id)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_direccion foreign key (envio_pedido_direccion_id)
         references CARPINCHO_LOVERS.direccion_usuario (direccion_id)
 alter table CARPINCHO_LOVERS.envio_pedido add constraint fk_envio_pedido_repartidor foreign key (envio_pedido_repartidor_id)
@@ -573,6 +570,15 @@ BEGIN
 END
 go
 
+CREATE function CARPINCHO_LOVERS.buscar_categoria_local(@categoria_nombre nvarchar(100)) RETURNS decimal(18,0)
+AS
+BEGIN
+    RETURN
+    (
+        select categoria_id from CARPINCHO_LOVERS.categoria where categoria_nombre = @categoria_nombre
+    )
+END
+go
 ------------------------------------------------- PROCEDURES -------------------------------------------------
 
 create proc CARPINCHO_LOVERS.migrar_usuarios as
@@ -811,11 +817,14 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_local as
 BEGIN
-    insert CARPINCHO_LOVERS.local(local_nombre, local_descripcion, local_direccion, local_localidad, local_tipo)
+    insert CARPINCHO_LOVERS.local(local_nombre, local_descripcion, local_direccion, local_localidad, local_categoria)
     (
         SELECT LOCAL_NOMBRE, LOCAL_DESCRIPCION, LOCAL_DIRECCION,
             CARPINCHO_LOVERS.buscar_localidad(LOCAL_PROVINCIA, LOCAL_LOCALIDAD),
-            (select tipo_local_id from CARPINCHO_LOVERS.tipo_local where tipo_local_descripcion = LOCAL_TIPO)
+            case 
+                    when LOCAL_TIPO = 'Tipo Local Mercado' then CARPINCHO_LOVERS.buscar_categoria_local('Categoria generica Mercado')
+                    when LOCAL_TIPO = 'Tipo Local Restaurante' then CARPINCHO_LOVERS.buscar_categoria_local('Categoria generica Restaurante')
+            end
         from gd_esquema.Maestra 
 		where LOCAL_NOMBRE is not null
 		group by LOCAL_NOMBRE ,LOCAL_DESCRIPCION, LOCAL_DIRECCION, LOCAL_PROVINCIA, LOCAL_LOCALIDAD, LOCAL_TIPO
@@ -831,6 +840,8 @@ begin
     insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Minimercado', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
     insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Kiosco', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
     insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Supermercado', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Categoria generica Restaurante', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Restaurante'))
+    insert into CARPINCHO_LOVERS.categoria(categoria_nombre, categoria_tipo) values ('Categoria generica Mercado', CARPINCHO_LOVERS.buscar_tipo_local('Tipo Local Mercado'))
 end
 go
 
@@ -1161,7 +1172,8 @@ go
 
 ------------------------------------------------- EXECUTE PROCEDURES -------------------------------------------------
 
-exec CARPINCHO_LOVERS.migrar_tipo_local 
+exec CARPINCHO_LOVERS.migrar_tipo_local
+exec CARPINCHO_LOVERS.migrar_categoria
 exec CARPINCHO_LOVERS.migrar_provincia 
 exec CARPINCHO_LOVERS.migrar_localidad 
 exec CARPINCHO_LOVERS.migrar_usuarios 
@@ -1192,7 +1204,6 @@ exec CARPINCHO_LOVERS.migrar_cupon
 exec CARPINCHO_LOVERS.migrar_cupon_reclamo
 exec CARPINCHO_LOVERS.migrar_paquete
 exec CARPINCHO_LOVERS.migrar_cupon_x_pedido
-exec CARPINCHO_LOVERS.migrar_categoria
 exec CARPINCHO_LOVERS.migrar_trazabilidad_envio_mensajeria
 exec CARPINCHO_LOVERS.migrar_trazabilidad_pedido
 exec CARPINCHO_LOVERS.migrar_trazabilidad_reclamo

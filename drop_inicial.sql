@@ -91,6 +91,7 @@ drop function CARPINCHO_LOVERS.buscar_medio_de_pago
 drop function CARPINCHO_LOVERS.buscar_tipo_medio_de_pago
 drop function CARPINCHO_LOVERS.buscar_marca_tarjeta
 drop function CARPINCHO_LOVERS.buscar_tipo_cupon
+drop function CARPINCHO_LOVERS.buscar_categoria_local
 
 go
 drop schema CARPINCHO_LOVERS
