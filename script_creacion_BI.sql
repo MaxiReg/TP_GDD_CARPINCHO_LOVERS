@@ -1,6 +1,9 @@
 use GD1C2023
 go
 
+set language 'English';
+
+go
 -------- TABLAS DE DIMENSIONES --------
 
 create table CARPINCHO_LOVERS.dimension_dia_semana(
@@ -36,22 +39,22 @@ create table CARPINCHO_LOVERS.dimension_tiempo(
 
 create table CARPINCHO_LOVERS.dimension_estado_reclamo(
     dimension_estado_reclamo_id decimal(18, 0) not null identity(1, 1),
-    estado_reclamo_descripcion nvarchar(50) not null
+    dimension_estado_reclamo_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_estado_pedido(
     dimension_estado_pedido_id decimal(18, 0) not null identity(1, 1),
-    estado_pedido_descripcion nvarchar(50) not null
+    dimension_estado_pedido_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_estado_envio_mensajeria(
     dimension_estado_envio_mensajeria_id decimal(18, 0) not null identity(1, 1),
-    estado_mensajeria_descripcion nvarchar(50) not null
+    dimension_estado_mensajeria_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_tipo_reclamo(
     dimension_tipo_reclamo_id decimal(18, 0) not null identity(1, 1),
-    reclamo_tipo_descripcion nvarchar(50) not null
+    dimension_reclamo_tipo_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_local(
@@ -72,12 +75,12 @@ create table CARPINCHO_LOVERS.dimension_tipo_movilidad(
 
 create table CARPINCHO_LOVERS.dimension_tipo_medio_de_pago(
     dimension_tipo_medio_de_pago_id decimal(18,0) not null identity(1, 1),
-    tipo_medio_de_pago_descripcion nvarchar(50)
+    dimension_tipo_medio_de_pago_descripcion nvarchar(50)
 )
 
 create table CARPINCHO_LOVERS.dimension_tipo_paquete(
     dimension_tipo_paquete_id decimal(18,0) not null identity(1, 1),
-    tipo_paquete_descripcion nvarchar(255) not null
+    dimension_tipo_paquete_descripcion nvarchar(255) not null
 )
 
 
@@ -218,7 +221,7 @@ go
 
 -------- Funciones --------
 
-create function CARPINCHO_LOVERS.buscar_rango_etario_id(@fecha_nacimiento date) returns decimal(18, 0) 
+create function CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(@fecha_nacimiento date) returns decimal(18, 0) 
 as
 begin
     return(
@@ -229,17 +232,17 @@ begin
 end
 go
 
-create function CARPINCHO_LOVERS.buscar_rango_horario_id(@horario decimal(18, 0)) returns decimal(18, 0) as
+create function CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(@horario datetime) returns decimal(18, 0) as
 begin
     return(
         select dimension_rango_horario_id
-        from CARPINCHO_LOVERS.dimension_rango_horario
+        from CARPINCHO_LOVERS.dimension_rango_horario -- DATEPART
         where @horario >= horario_desde and @horario < horario_hasta
     )
 end
 go
 
-create function CARPINCHO_LOVERS.buscar_tiempo_id(@anio decimal(4, 0), @mes decimal(2, 0)) returns decimal(18, 0) as
+create function CARPINCHO_LOVERS.buscar_dimension_tiempo_id(@anio decimal(4, 0), @mes decimal(2, 0)) returns decimal(18, 0) as
 begin
     return(
         select dimension_tiempo_id
@@ -249,7 +252,7 @@ begin
 end
 go
 
-create function CARPINCHO_LOVERS.buscar_categoria_id(@categoria nvarchar(100), @tipo nvarchar(50)) returns decimal(18, 0) as
+create function CARPINCHO_LOVERS.buscar_dimension_categoria_id(@categoria nvarchar(100), @tipo nvarchar(50)) returns decimal(18, 0) as
 begin
     return(
         select dimension_tipo_local_categoria_id
@@ -259,23 +262,62 @@ begin
 end
 go
 
-create function CARPINCHO_LOVERS.buscar_dia_id(@dia nvarchar(50)) returns decimal(18, 0) as
+create function CARPINCHO_LOVERS.buscar_dimension_dia_id(@fecha date) returns decimal(18, 0) as
 begin
     return(
         select dimension_dia_semana_id
         from CARPINCHO_LOVERS.dimension_dia_semana
-        where @dia = nombre
+        where CARPINCHO_LOVERS.buscar_dimension_dia(@fecha) = nombre
     )
 end
 go
 
-create function CARPINCHO_LOVERS.buscar_tipo_movilidad_id(@horario decimal(18, 0)) returns decimal(18, 0) as
+create function CARPINCHO_LOVERS.buscar_dimension_dia(@fecha date) returns nvarchar(50) as
 begin
     return(
-        select dimension_rango_horario_id
-        from CARPINCHO_LOVERS.dimension_rango_horario
-        where @horario >= horario_desde and @horario < horario_hasta
+        case
+                when datename(weekday, @fecha) = 'Monday' then 'Lunes'
+                when datename(weekday, @fecha) = 'Tuesday' then 'Martes'
+                when datename(weekday, @fecha) = 'Wednesday' then 'Miercoles'
+                when datename(weekday, @fecha) = 'Thursday' then 'Jueves'
+                when datename(weekday, @fecha) = 'Friday' then 'Viernes'
+                when datename(weekday, @fecha) = 'Saturday' then 'Sabado'
+                when datename(weekday, @fecha) = 'Sunday' then 'Domingo'
+        end                
     )
+end
+go
+
+create function CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(@repartidor_id decimal(18, 0)) returns decimal(18, 0) as
+begin
+    return(
+        select dimension_tipo_movilidad_id
+        from CARPINCHO_LOVERS.movilidad_tipo as t1
+        join CARPINCHO_LOVERS.repartidor as t2 on t1.movilidad_tipo_id = t2.repartidor_tipo_movilidad
+        join CARPINCHO_LOVERS.dimension_tipo_movilidad as t3 on t3.movilidad_tipo_descripcion = t1.movilidad_tipo_descripcion
+        where t2.repartidor_id = @repartidor_id
+    )
+end
+go
+
+create function CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(@localidad decimal(18, 0)) returns decimal(18, 0) as
+begin
+    return(
+        select dimension_provincia_localidad_id
+        from CARPINCHO_LOVERS.provincia as t1
+        join CARPINCHO_LOVERS.localidad as t2 on t1.provincia_id = t2.localidad_provincia_id
+        join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t3.nombre_provincia + t3.nombre_localidad = t1.provincia_nombre + t2.localidad_nombre
+        where t2.localidad_id = @localidad
+    )
+end
+go
+
+
+create function CARPINCHO_LOVERS.calcular_desvio_de_entrega(@fecha_inicio decimal(18, 0), @fecha_entrega decimal(18,0), @estimacion decimal(18,2)) returns decimal(18,2) as
+begin
+    DECLARE @resultado decimal(18,2);
+    set @resultado = @estimacion - (@fecha_inicio - @fecha_entrega) -- REVISAR LA FORMULA
+    return @resultado
 end
 go
 
@@ -321,7 +363,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_tipo_paquete as
 begin
-    insert CARPINCHO_LOVERS.dimension_tipo_paquete(dimension_tipo_paquete_id, tipo_paquete_descripcion)
+    insert CARPINCHO_LOVERS.dimension_tipo_paquete(dimension_tipo_paquete_id, dimension_tipo_paquete_descripcion)
     (
         select tipo_paquete_id, tipo_paquete_descripcion from CARPINCHO_LOVERS.tipo_paquete
     )
@@ -330,7 +372,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_estado_envio_mensajeria as
 begin
-    insert CARPINCHO_LOVERS.dimension_estado_envio_mensajeria(dimension_estado_envio_mensajeria_id, estado_mensajeria_descripcion)
+    insert CARPINCHO_LOVERS.dimension_estado_envio_mensajeria(dimension_estado_envio_mensajeria_id, dimension_estado_mensajeria_descripcion)
     (
         select estado_mensajeria_id, estado_mensajeria_descripcion from CARPINCHO_LOVERS.estado_envio_mensajeria
     )
@@ -339,7 +381,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_estado_pedido as
 begin
-    insert CARPINCHO_LOVERS.dimension_estado_pedido(dimension_estado_pedido_id, estado_pedido_descripcion)
+    insert CARPINCHO_LOVERS.dimension_estado_pedido(dimension_estado_pedido_id, dimension_estado_pedido_descripcion)
     (
         select estado_pedido_id, estado_pedido_descripcion from CARPINCHO_LOVERS.estado_pedido
     )
@@ -348,7 +390,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_estado_reclamo as
 begin
-    insert CARPINCHO_LOVERS.dimension_estado_reclamo(dimension_estado_reclamo_id, estado_reclamo_descripcion)
+    insert CARPINCHO_LOVERS.dimension_estado_reclamo(dimension_estado_reclamo_id, dimension_estado_reclamo_descripcion)
     (
         select estado_reclamo_id, estado_reclamo_descripcion from CARPINCHO_LOVERS.estado_reclamo
     )
@@ -366,7 +408,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_tipo_medio_de_pago as
 begin
-    insert CARPINCHO_LOVERS.dimension_tipo_medio_de_pago(dimension_tipo_medio_de_pago_id, tipo_medio_de_pago_descripcion)
+    insert CARPINCHO_LOVERS.dimension_tipo_medio_de_pago(dimension_tipo_medio_de_pago_id, dimension_tipo_medio_de_pago_descripcion)
     (
         select tipo_medio_pago_id, tipo_medio_pago_descripcion from CARPINCHO_LOVERS.tipo_medio_de_pago
     )
@@ -423,3 +465,115 @@ begin
         ('22 a 24', 22, 24)
 end
 go
+
+
+create proc CARPINCHO_LOVERS.migrar_hechos_mensajeria as
+begin
+    insert CARPINCHO_LOVERS.hechos_mensajeria(dimension_dia_semana_id, dimension_tiempo_id, dimension_estado_envio_mensajeria_id, 
+    dimension_tipo_movilidad_id, dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, 
+    dimension_rango_horario_id, dimension_rango_etario_id, promedio_valor_asegurado, desvio_promedio_tiempo_entrega)
+
+        select 
+            CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
+            
+            CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(envio_mensajeria_fecha), month(envio_mensajeria_fecha)),
+
+            (select dimension_estado_envio_mensajeria from CARPINCHO_LOVERS.dimension_estado_envio_mensajeria 
+                where estado_mensajeria_descripcion = dimension_estado_mensajeria_descripcion),
+            
+            CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_mensajeria_repartidor_id),
+
+            CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(envio_mensajeria_localidad_origen),
+            
+            (select dimension_tipo_medio_de_pago_id from CARPINCHO_LOVERS.dimension_tipo_medio_de_pago
+                where dimension_tipo_medio_de_pago_descripcion = tipo_medio_pago_descripcion),
+
+            (select dimension_tipo_paquete_id from dimension_tipo_paquete
+                where dimension_tipo_paquete_descripcion = tipo_paquete_descripcion),
+
+            CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
+
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
+            
+            sum(envio_mensajeria_valor_asegurado)/count(*),
+
+            avg(CARPINCHO_LOVERS.calcular_desvio_de_entrega(envio_mensajeria, envio_mensajeria_fecha_entrega, envio_mensajeria_tiempo_estimado))
+
+            count(*)
+
+        from CARPINCHO_LOVERS.envio_mensajeria 
+            join CARPINCHO_LOVERS.tipo_medio_de_pago on envio_mensajeria_medio_pago_id = tipo_medio_pago_id
+            join CARPINCHO_LOVERS.estado_envio_mensajeria on envio_mensajeria_estado = estado_mensajeria_id
+            join CARPINCHO_LOVERS.usuario on envio_mensajeria_usuario_id = usuario_id
+
+        group by 
+        CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
+        CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(envio_mensajeria_fecha), month(envio_mensajeria_fecha)),
+        estado_mensajeria_descripcion,
+        envio_mensajeria_repartidor_id,
+        envio_mensajeria_localidad_origen,
+        tipo_medio_pago_descripcion,
+        tipo_paquete_descripcion,
+        CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
+        CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac)
+
+end
+go
+
+
+create proc CARPINCHO_LOVERS.migrar_hechos_pedidos as
+begin
+    insert CARPINCHO_LOVERS.hechos_pedidos(dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id,
+    dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, 
+    dimension_rango_etario_usuario, dimension_rango_etario_repartidor, desvio_promedio_tiempo_entrega, promedio_calificacion, cantidad_pedidos,
+    monto_total_pedidos, monto_promedio_envios, monto_total_cupones)
+
+        select 
+            
+        from CARPINCHO_LOVERS.pedidos
+end
+go
+
+create proc CARPINCHO_LOVERS.migrar_hechos_reclamo as
+begin
+    insert CARPINCHO_LOVERS.hechos_reclamos(dimension_dia_semana_id, dimension_tiempo_id, dimension_local_id, dimension_estado_reclamo_id, 
+    dimension_rango_horario_id, dimension_rango_etario_id, dimension_tipo_reclamo_id, cantidad_reclamos, tiempo_promedio_resolucion,
+    monto_cupones)
+
+        select 
+            CARPINCHO_LOVERS.buscar_dimension_dia_id(reclamo_fecha),
+
+            buscar_dimension_tiempo_id(year(reclamo_fecha), month(reclamo_fecha)),
+
+            (select dimension_local_id
+             from CARPINCHO_LOVERS.dimension_local
+             where dimension_local_id in (select pedido_local_id
+								         from CARPINCHO_LOVERS.pedido JOIN CARPINCHO_LOVERS.local on local_id = pedido_local_id
+								         group by pedido_local_id)),
+
+            (select dimension_estado_reclamo_id
+             from CARPINCHO_LOVERS.dimension_estado_reclamo
+             where estado_reclamo_descripcion = dimension_estado_reclamo_descripcion),
+
+            buscar_dimension_rango_horario_id(reclamo_fecha),
+
+            buscar_dimension_rango_etario_id(operador_reclamo),
+
+            (select dimension_tipo_reclamo_id
+             from CARPINCHO_LOVERS.dimension_tipo_reclamo
+             where dimension_reclamo_tipo_descripcion = reclamo_tipo_descripcion
+            )
+
+            count(reclamo_nro),
+            --tiempo promedio resolucion
+            -- monto_cupones
+
+            
+            
+        from CARPINCHO_LOVERS.reclamo 
+            join estado_reclamo on reclamo_estado = estado_reclamo_id
+            join operador_reclamo on operador_reclamo_id = reclamo_operador_id
+            join reclamo_tipo on reclamo_tipo_id = reclamo_tipo
+
+        -- group by
+end
