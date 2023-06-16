@@ -1,0 +1,46 @@
+use GD1C2023
+go
+
+--DROP TABLE
+drop table CARPINCHO_LOVERS.hechos_mensajeria
+drop table CARPINCHO_LOVERS.hechos_pedidos
+drop table CARPINCHO_LOVERS.hechos_reclamos
+drop table CARPINCHO_LOVERS.dimension_estado_envio_mensajeria
+drop table CARPINCHO_LOVERS.dimension_estado_pedido
+drop table CARPINCHO_LOVERS.dimension_estado_reclamo
+drop table CARPINCHO_LOVERS.dimension_rango_etario
+drop table CARPINCHO_LOVERS.dimension_rango_horario
+drop table CARPINCHO_LOVERS.dimension_tiempo
+drop table CARPINCHO_LOVERS.dimension_categoria_local
+drop table CARPINCHO_LOVERS.dimension_tipo_medio_de_pago
+drop table CARPINCHO_LOVERS.dimension_tipo_movilidad
+drop table CARPINCHO_LOVERS.dimension_tipo_paquete
+drop table CARPINCHO_LOVERS.dimension_tipo_reclamo
+drop table CARPINCHO_LOVERS.dimension_dia_semana
+drop table CARPINCHO_LOVERS.dimension_provincia_localidad
+drop table CARPINCHO_LOVERS.dimension_local
+
+
+--DROP PROCEDURE
+drop proc CARPINCHO_LOVERS.migrar_dimension_estado_envio_mensajeria
+drop proc CARPINCHO_LOVERS.migrar_dimension_estado_pedido
+drop proc CARPINCHO_LOVERS.migrar_dimension_estado_reclamo
+drop proc CARPINCHO_LOVERS.migrar_dimension_tipo_medio_de_pago
+drop proc CARPINCHO_LOVERS.migrar_dimension_tipo_reclamo
+drop proc CARPINCHO_LOVERS.migrar_dimension_tipo_paquete
+drop proc CARPINCHO_LOVERS.migrar_dimension_tipo_movilidad
+drop proc CARPINCHO_LOVERS.migrar_dimension_local
+drop proc CARPINCHO_LOVERS.migrar_dimension_categoria_local
+drop proc CARPINCHO_LOVERS.migrar_dimension_dia_semana
+drop proc CARPINCHO_LOVERS.migrar_dimension_rango_horario
+drop proc CARPINCHO_LOVERS.migrar_dimension_provincia_localidad
+
+--drop proc CARPINCHO_LOVERS.migrar_dimension_rango_etario
+
+--DROP FUNCTIONS
+drop function CARPINCHO_LOVERS.buscar_rango_etario_id
+drop function CARPINCHO_LOVERS.buscar_rango_horario_id
+drop function CARPINCHO_LOVERS.buscar_tiempo_id
+drop function CARPINCHO_LOVERS.buscar_categoria_id
+drop function CARPINCHO_LOVERS.buscar_dia_id
+drop function CARPINCHO_LOVERS.buscar_tipo_movilidad_id
