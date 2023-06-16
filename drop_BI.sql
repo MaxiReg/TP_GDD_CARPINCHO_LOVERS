@@ -34,8 +34,8 @@ drop proc CARPINCHO_LOVERS.migrar_dimension_categoria_local
 drop proc CARPINCHO_LOVERS.migrar_dimension_dia_semana
 drop proc CARPINCHO_LOVERS.migrar_dimension_rango_horario
 drop proc CARPINCHO_LOVERS.migrar_dimension_provincia_localidad
-
---drop proc CARPINCHO_LOVERS.migrar_dimension_rango_etario
+drop proc CARPINCHO_LOVERS.migrar_dimension_tiempo
+drop proc CARPINCHO_LOVERS.migrar_dimension_rango_etario
 
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_rango_etario_id

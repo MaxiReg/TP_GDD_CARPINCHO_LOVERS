@@ -160,70 +160,71 @@ alter table CARPINCHO_LOVERS.hechos_reclamos add constraint pk_hechos_reclamos p
 
 -------- FKs --------
 -- Hechos
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_dia_semana (dimension_dia_semana_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_dia_semana foreign key (dimension_dia_semana_id)
         references CARPINCHO_LOVERS.dimension_dia_semana (dimension_dia_semana_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tiempo (dimension_tiempo_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tiempo foreign key (dimension_tiempo_id)
         references CARPINCHO_LOVERS.dimension_tiempo (dimension_tiempo_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_estado_envio_mensajeria (dimension_estado_envio_mensajeria_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_estado_envio_mensajeria foreign key (dimension_estado_envio_mensajeria_id)
         references CARPINCHO_LOVERS.dimension_estado_envio_mensajeria (dimension_estado_envio_mensajeria_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_movilidad (dimension_tipo_movilidad_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_movilidad foreign key (dimension_tipo_movilidad_id)
         references CARPINCHO_LOVERS.dimension_tipo_movilidad (dimension_tipo_movilidad_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_provincia_localidad (dimension_provincia_localidad_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_provincia_localidad foreign key (dimension_provincia_localidad_id)
         references CARPINCHO_LOVERS.dimension_provincia_localidad (dimension_provincia_localidad_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_medio_de_pago (dimension_tipo_medio_pago_id)
-        references CARPINCHO_LOVERS.dimension_tipo_medio_de_pago (dimension_tipo_medio_pago_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_paquete (dimension_tipo_paquete_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_medio_de_pago foreign key (dimension_tipo_medio_de_pago_id)
+        references CARPINCHO_LOVERS.dimension_tipo_medio_de_pago (dimension_tipo_medio_de_pago_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_paquete foreign key (dimension_tipo_paquete_id)
         references CARPINCHO_LOVERS.dimension_tipo_paquete (dimension_tipo_paquete_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_horario (dimension_rango_horario_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_horario foreign key (dimension_rango_horario_id)
         references CARPINCHO_LOVERS.dimension_rango_horario (dimension_rango_horario_id)
-alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario (dimension_rango_etario_id)
+alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario foreign key (dimension_rango_etario_id)
         references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
 
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_dia_semana (dimension_dia_semana_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_dia_semana foreign key (dimension_dia_semana_id)
         references CARPINCHO_LOVERS.dimension_dia_semana (dimension_dia_semana_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_horario (dimension_rango_horario_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_horario foreign key (dimension_rango_horario_id)
         references CARPINCHO_LOVERS.dimension_rango_horario (dimension_rango_horario_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_provincia_localidad (dimension_provincia_localidad_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_provincia_localidad foreign key (dimension_provincia_localidad_id)
         references CARPINCHO_LOVERS.dimension_provincia_localidad (dimension_provincia_localidad_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tipo_local_categoria (dimension_tipo_local_categoria_id)
-        references CARPINCHO_LOVERS.dimension_tipo_local_categoria (dimension_tipo_local_categoria_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tiempo (dimension_tiempo_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_categoria_local foreign key (dimension_tipo_local_categoria_id)
+        references CARPINCHO_LOVERS.dimension_categoria_local (dimension_tipo_local_categoria_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tiempo foreign key (dimension_tiempo_id)
         references CARPINCHO_LOVERS.dimension_tiempo (dimension_tiempo_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tipo_movilidad (dimension_tipo_movilidad_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tipo_movilidad foreign key (dimension_tipo_movilidad_id)
         references CARPINCHO_LOVERS.dimension_tipo_movilidad (dimension_tipo_movilidad_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_local (dimension_local_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_local foreign key (dimension_local_id)
         references CARPINCHO_LOVERS.dimension_local (dimension_local_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_estado_pedido (dimension_estado_pedido_id)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_estado_pedido foreign key (dimension_estado_pedido_id)
         references CARPINCHO_LOVERS.dimension_estado_pedido (dimension_estado_pedido_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_usuario (dimension_rango_etario_usuario)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_usuario foreign key (dimension_rango_etario_usuario)
         references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
-alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_repartidor (dimension_rango_etario_repartidor)
+alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor)
         references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
 
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_dia_semana (dimension_dia_semana_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_dia_semana foreign key (dimension_dia_semana_id)
         references CARPINCHO_LOVERS.dimension_dia_semana (dimension_dia_semana_id)
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_tiempo (dimension_tiempo_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_tiempo foreign key (dimension_tiempo_id)
         references CARPINCHO_LOVERS.dimension_tiempo (dimension_tiempo_id)
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_local (dimension_local_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_local foreign key (dimension_local_id)
         references CARPINCHO_LOVERS.dimension_local (dimension_local_id)
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_estado_reclamo (dimension_estado_reclamo_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_estado_reclamo foreign key (dimension_estado_reclamo_id)
         references CARPINCHO_LOVERS.dimension_estado_reclamo (dimension_estado_reclamo_id)
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_rango_horario (dimension_rango_horario_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_rango_horario foreign key (dimension_rango_horario_id)
         references CARPINCHO_LOVERS.dimension_rango_horario (dimension_rango_horario_id)
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_rango_etario (dimension_rango_etario_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_rango_etario foreign key (dimension_rango_etario_id)
         references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
-alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_tipo_reclamo (dimension_tipo_reclamo_id)
+alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_tipo_reclamo foreign key (dimension_tipo_reclamo_id)
         references CARPINCHO_LOVERS.dimension_tipo_reclamo (dimension_tipo_reclamo_id)
 go
 
 -------- Funciones --------
 
-create function CARPINCHO_LOVERS.buscar_rango_etario_id(@fecha_nacimiento date) returns decimal(18, 0) as
+create function CARPINCHO_LOVERS.buscar_rango_etario_id(@fecha_nacimiento date) returns decimal(18, 0) 
+as
 begin
     return(
         select dimension_rango_etario_id
         from CARPINCHO_LOVERS.dimension_rango_etario
-        where (year(getdate()) - @fecha_nacimiento) between edad_desde and edad_hasta
+        where (year(getdate()) - year(@fecha_nacimiento)) between edad_desde and edad_hasta
     )
 end
 go
@@ -310,7 +311,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_categoria_local as
 begin
-    insert CARPINCHO_LOVERS.dimension_categoria_local(dimension_categroia_local_id, categoria_nombre, tipo_local_descripcion)
+    insert CARPINCHO_LOVERS.dimension_categoria_local(dimension_tipo_local_categoria_id, categoria_nombre, tipo_local_descripcion)
     (
         select categoria_id, categoria_nombre, tipo_local_descripcion
         from CARPINCHO_LOVERS.categoria join CARPINCHO_LOVERS.tipo_local on categoria_tipo = tipo_local_id
@@ -354,7 +355,7 @@ begin
 end
 go
 
-create proc CARPINCHO_LOVERS.dimension_tipo_reclamo as
+create proc CARPINCHO_LOVERS.migrar_dimension_tipo_reclamo as
 begin
     insert CARPINCHO_LOVERS.dimension_tipo_reclamo(dimension_tipo_reclamo_id, tipo_reclamo_descripcion)
     (
@@ -363,7 +364,7 @@ begin
 end
 go
 
-create proc CARPINCHO_LOVERS.dimension_tipo_medio_de_pago as
+create proc CARPINCHO_LOVERS.migrar_dimension_tipo_medio_de_pago as
 begin
     insert CARPINCHO_LOVERS.dimension_tipo_medio_de_pago(dimension_tipo_medio_de_pago_id, tipo_medio_de_pago_descripcion)
     (
@@ -374,7 +375,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_tipo_movilidad as
 begin
-    insert CARPINCHO_LOVERS.dimension_tipo_movilidad(dimension_tipo_movilidad_id, movilidad_tipo)
+    insert CARPINCHO_LOVERS.dimension_tipo_movilidad(dimension_tipo_movilidad_id, movilidad_tipo_descripcion)
     (
         select movilidad_tipo_id, movilidad_tipo_descripcion from CARPINCHO_LOVERS.movilidad_tipo
     )
@@ -384,25 +385,23 @@ go
 create proc CARPINCHO_LOVERS.migrar_dimension_tiempo as
 begin
     insert CARPINCHO_LOVERS.dimension_tiempo(anio, mes)
-    (
-        select year(pedido_fecha) as year, month(pedido_fecha) as month from CARPINCHO_LOVERS.pedido
+		select year(pedido_fecha) as anio, month(pedido_fecha) as mes from CARPINCHO_LOVERS.pedido
         union
-        select year(envio_mensajeria_fecha) as year, month(envio_mensajeria_fecha) as month from CARPINCHO_LOVERS.envio_mensajeria
+        select year(envio_mensajeria_fecha) as anio, month(envio_mensajeria_fecha) as mes from CARPINCHO_LOVERS.envio_mensajeria
         union
-        select year(reclamo_fecha) as year, month(reclamo_fecha) as month from CARPINCHO_LOVERS.reclamo
-		order by year, month
-    )
+        select year(reclamo_fecha) as anio, month(reclamo_fecha) as mes from CARPINCHO_LOVERS.reclamo
+		order by anio, mes;
 end
 go
 
-create proc CARPINCHO_LOVERS.migrar_dimension_tiempo as
+create proc CARPINCHO_LOVERS.migrar_dimension_rango_etario as
 begin
-    insert into CARPINCHO_LOVERS.dimension_tiempo(edad_descripcion, edad_desde, edad_hasta)
+    insert into CARPINCHO_LOVERS.dimension_rango_etario(edad_descripcion, edad_desde, edad_hasta)
     values
-        ("Menor a 25", 0, 24),
-        ("25 a 34", 25 , 34),
-        ("35 a 54", 35, 54),
-        ("Mayor que 55", 55, 9999)
+        ('Menor a 25', 0, 24),
+        ('25 a 34', 25 , 34),
+        ('35 a 54', 35, 54),
+        ('Mayor que 55', 55, 9999)
 end
 go
 
@@ -410,17 +409,17 @@ create proc CARPINCHO_LOVERS.migrar_dimension_rango_horario as
 begin
     insert into CARPINCHO_LOVERS.dimension_rango_horario(horario_descripcion, horario_desde, horario_hasta)
     values
-        ("00 a 02", 0, 2),
-        ("02 a 04", 2, 4),
-        ("04 a 06", 4, 6),
-        ("06 a 08", 6, 8),
-        ("08 a 10", 8, 10),
-        ("10 a 12", 10, 12),
-        ("12 a 14", 12, 14),
-        ("14 a 16", 14, 16),
-        ("16 a 18", 16, 18),
-        ("18 a 20", 18, 20),
-        ("20 a 22", 20, 22),
-        ("22 a 24", 22, 24)
+        ('00 a 02', 0, 2),
+        ('02 a 04', 2, 4),
+        ('04 a 06', 4, 6),
+        ('06 a 08', 6, 8),
+        ('08 a 10', 8, 10),
+        ('10 a 12', 10, 12),
+        ('12 a 14', 12, 14),
+        ('14 a 16', 14, 16),
+        ('16 a 18', 16, 18),
+        ('18 a 20', 18, 20),
+        ('20 a 22', 20, 22),
+        ('22 a 24', 22, 24)
 end
 go
