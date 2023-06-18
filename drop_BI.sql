@@ -37,6 +37,10 @@ drop proc CARPINCHO_LOVERS.migrar_dimension_provincia_localidad
 drop proc CARPINCHO_LOVERS.migrar_dimension_tiempo
 drop proc CARPINCHO_LOVERS.migrar_dimension_rango_etario
 
+--drop proc CARPINCHO_LOVERS.migrar_hechos_mensajeria
+--drop proc CARPINCHO_LOVERS.migrar_hechos_pedidos
+--drop proc CARPINCHO_LOVERS.migrar_hechos_reclamo
+
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_dimension_rango_etario_id
 drop function CARPINCHO_LOVERS.buscar_dimension_rango_horario_id
@@ -44,3 +48,6 @@ drop function CARPINCHO_LOVERS.buscar_dimension_tiempo_id
 drop function CARPINCHO_LOVERS.buscar_dimension_categoria_id
 drop function CARPINCHO_LOVERS.buscar_dimension_dia_id
 drop function CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id
+drop function CARPINCHO_LOVERS.buscar_dimension_dia
+drop function CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id
+drop function CARPINCHO_LOVERS.calcular_desvio_de_entrega

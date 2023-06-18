@@ -13,8 +13,8 @@ create table CARPINCHO_LOVERS.dimension_dia_semana(
 
 create table CARPINCHO_LOVERS.dimension_provincia_localidad(
     dimension_provincia_localidad_id decimal(18, 0) not null identity(1, 1),
-    nombre_provincia nvarchar(255) not null,
-    nombre_localidad nvarchar(255) not null
+    dimension_nombre_provincia nvarchar(255) not null,
+    dimension_nombre_localidad nvarchar(255) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_rango_horario(
@@ -59,18 +59,18 @@ create table CARPINCHO_LOVERS.dimension_tipo_reclamo(
 
 create table CARPINCHO_LOVERS.dimension_local(
     dimension_local_id decimal(18, 0) not null identity(1, 1),
-    local_nombre nvarchar(100) not null
+    dimension_local_nombre nvarchar(100) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_categoria_local(
     dimension_tipo_local_categoria_id decimal(18, 0) not null identity(1, 1),
-    categoria_nombre nvarchar(100) not null,
-    tipo_local_descripcion nvarchar(50) not null
+    dimension_categoria_nombre nvarchar(100) not null,
+    dimension_tipo_local_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_tipo_movilidad(
     dimension_tipo_movilidad_id decimal(18,0) not null identity(1, 1),
-    movilidad_tipo_descripcion nvarchar(50) not null
+    dimension_movilidad_tipo_descripcion nvarchar(50) not null
 )
 
 create table CARPINCHO_LOVERS.dimension_tipo_medio_de_pago(
@@ -257,7 +257,7 @@ begin
     return(
         select dimension_tipo_local_categoria_id
         from CARPINCHO_LOVERS.dimension_categoria_local
-        where @categoria = categoria_nombre and @tipo = tipo_local_descripcion
+        where @categoria = dimension_categoria_nombre and @tipo = dimension_tipo_local_descripcion
     )
 end
 go
@@ -294,7 +294,7 @@ begin
         select dimension_tipo_movilidad_id
         from CARPINCHO_LOVERS.movilidad_tipo as t1
         join CARPINCHO_LOVERS.repartidor as t2 on t1.movilidad_tipo_id = t2.repartidor_tipo_movilidad
-        join CARPINCHO_LOVERS.dimension_tipo_movilidad as t3 on t3.movilidad_tipo_descripcion = t1.movilidad_tipo_descripcion
+        join CARPINCHO_LOVERS.dimension_tipo_movilidad as t3 on t3.dimension_movilidad_tipo_descripcion = t1.movilidad_tipo_descripcion
         where t2.repartidor_id = @repartidor_id
     )
 end
@@ -306,7 +306,7 @@ begin
         select dimension_provincia_localidad_id
         from CARPINCHO_LOVERS.provincia as t1
         join CARPINCHO_LOVERS.localidad as t2 on t1.provincia_id = t2.localidad_provincia_id
-        join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t3.nombre_provincia + t3.nombre_localidad = t1.provincia_nombre + t2.localidad_nombre
+        join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t3.dimension_nombre_provincia + t3.dimension_nombre_localidad = t1.provincia_nombre + t2.localidad_nombre
         where t2.localidad_id = @localidad
     )
 end
@@ -321,7 +321,10 @@ begin
 end
 go
 
+
 -------- Procedures --------
+
+-- DIMENSIONES --
 create proc CARPINCHO_LOVERS.migrar_dimension_dia_semana as
 begin
     insert CARPINCHO_LOVERS.dimension_dia_semana(dimension_dia_semana_id, nombre)
@@ -333,7 +336,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_provincia_localidad as
 begin
-    insert CARPINCHO_LOVERS.dimension_provincia_localidad(dimension_provincia_localidad_id, nombre_localidad, nombre_provincia)
+    insert CARPINCHO_LOVERS.dimension_provincia_localidad(dimension_provincia_localidad_id, dimension_nombre_localidad, dimension_nombre_provincia)
     (
         select localidad_id, localidad_nombre, provincia_nombre
         from localidad join provincia on localidad_provincia_id = provincia_id
@@ -343,7 +346,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_local as
 begin
-    insert CARPINCHO_LOVERS.dimension_local(dimension_local_id, local_nombre)
+    insert CARPINCHO_LOVERS.dimension_local(dimension_local_id, dimension_local_nombre)
     (
         select local_id, local_nombre
         from CARPINCHO_LOVERS.local
@@ -353,7 +356,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_categoria_local as
 begin
-    insert CARPINCHO_LOVERS.dimension_categoria_local(dimension_tipo_local_categoria_id, categoria_nombre, tipo_local_descripcion)
+    insert CARPINCHO_LOVERS.dimension_categoria_local(dimension_tipo_local_categoria_id, dimension_categoria_nombre, dimension_tipo_local_descripcion)
     (
         select categoria_id, categoria_nombre, tipo_local_descripcion
         from CARPINCHO_LOVERS.categoria join CARPINCHO_LOVERS.tipo_local on categoria_tipo = tipo_local_id
@@ -417,7 +420,7 @@ go
 
 create proc CARPINCHO_LOVERS.migrar_dimension_tipo_movilidad as
 begin
-    insert CARPINCHO_LOVERS.dimension_tipo_movilidad(dimension_tipo_movilidad_id, movilidad_tipo_descripcion)
+    insert CARPINCHO_LOVERS.dimension_tipo_movilidad(dimension_tipo_movilidad_id, dimension_movilidad_tipo_descripcion)
     (
         select movilidad_tipo_id, movilidad_tipo_descripcion from CARPINCHO_LOVERS.movilidad_tipo
     )
@@ -466,7 +469,7 @@ begin
 end
 go
 
-
+-- HECHOS --
 create proc CARPINCHO_LOVERS.migrar_hechos_mensajeria as
 begin
     insert CARPINCHO_LOVERS.hechos_mensajeria(dimension_dia_semana_id, dimension_tiempo_id, dimension_estado_envio_mensajeria_id, 
@@ -521,7 +524,7 @@ end
 go
 
 
-create proc CARPINCHO_LOVERS.migrar_hechos_pedidos as
+/*create proc CARPINCHO_LOVERS.migrar_hechos_pedidos as
 begin
     insert CARPINCHO_LOVERS.hechos_pedidos(dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id,
     dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, 
@@ -532,7 +535,7 @@ begin
             
         from CARPINCHO_LOVERS.pedidos
 end
-go
+go*/
 
 create proc CARPINCHO_LOVERS.migrar_hechos_reclamo as
 begin
@@ -543,37 +546,88 @@ begin
         select 
             CARPINCHO_LOVERS.buscar_dimension_dia_id(reclamo_fecha),
 
-            buscar_dimension_tiempo_id(year(reclamo_fecha), month(reclamo_fecha)),
+            CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(reclamo_fecha), month(reclamo_fecha)),
 
             (select dimension_local_id
              from CARPINCHO_LOVERS.dimension_local
              where dimension_local_id in (select pedido_local_id
-								         from CARPINCHO_LOVERS.pedido JOIN CARPINCHO_LOVERS.local on local_id = pedido_local_id
-								         group by pedido_local_id)),
+								          from CARPINCHO_LOVERS.pedido JOIN CARPINCHO_LOVERS.local on local_id = pedido_local_id
+								          group by pedido_local_id)),
 
             (select dimension_estado_reclamo_id
              from CARPINCHO_LOVERS.dimension_estado_reclamo
              where estado_reclamo_descripcion = dimension_estado_reclamo_descripcion),
 
-            buscar_dimension_rango_horario_id(reclamo_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(reclamo_fecha),
 
-            buscar_dimension_rango_etario_id(operador_reclamo),
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(operador_reclamo_fecha_nac),
 
             (select dimension_tipo_reclamo_id
              from CARPINCHO_LOVERS.dimension_tipo_reclamo
-             where dimension_reclamo_tipo_descripcion = reclamo_tipo_descripcion
-            )
+             where dimension_reclamo_tipo_descripcion = reclamo_tipo_descripcion),
 
             count(reclamo_nro),
-            --tiempo promedio resolucion
-            -- monto_cupones
 
+			avg(DATEDIFF(minute, reclamo_fecha, reclamo_fecha_solucion)), --tiempo promedio resolucion (en minutos fecha incio reclamo - fecha resolucion)
             
+			(select sum(cupon_monto)
+			 from CARPINCHO_LOVERS.cupon_reclamo join CARPINCHO_LOVERS.cupon on cupon_nro = cupon_reclamo_nro
+			 where cupon_reclamo_reclamo_nro = reclamo_nro) -- monto_cupones (monto generado en cupones a partir de reclamos)
             
         from CARPINCHO_LOVERS.reclamo 
             join estado_reclamo on reclamo_estado = estado_reclamo_id
             join operador_reclamo on operador_reclamo_id = reclamo_operador_id
             join reclamo_tipo on reclamo_tipo_id = reclamo_tipo
-
-        -- group by
+		group by 
+		CARPINCHO_LOVERS.buscar_dimension_dia_id(reclamo_fecha),
+		CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(reclamo_fecha), month(reclamo_fecha)), 
+		estado_reclamo_descripcion,
+		CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(reclamo_fecha),
+		CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(operador_reclamo_fecha_nac),
+		reclamo_tipo_descripcion,
+		reclamo_nro
 end
+--GO
+-------- Views --------
+
+/* Día de la semana y franja horaria con mayor cantidad de pedidos según la
+localidad y categoría del local, para cada mes de cada año. */
+
+
+/* Monto total no cobrado por cada local en función de los pedidos cancelados según el día de la semana y 
+la franja horaria (cuentan como pedidos cancelados tanto los que cancela el usuario como el local) */
+
+
+/*  Valor promedio mensual que tienen los envíos de pedidos en cada localidad. */
+
+
+/* Desvío promedio en tiempo de entrega según el tipo de movilidad, el día de la semana y la franja horaria.
+El desvío debe calcularse en minutos y representa la diferencia entre la fecha/hora en que se realizó el pedido y 
+la fecha/hora que se entregó en comparación con los minutos de tiempo estimados.
+Este indicador debe tener en cuenta todos los envíos, es decir, sumar tanto los envíos de pedidos como los de mensajería. */
+
+
+/* Monto total de los cupones utilizados por mes en función del rango etario de los usuarios. */
+
+
+/* Promedio de calificación mensual por local. */
+
+
+/* Porcentaje de pedidos y mensajería entregados mensualmente según el rango etario de los repartidores y la localidad.
+Este indicador se debe tener en cuenta y sumar tanto los envíos de pedidos como los de mensajería.
+El porcentaje se calcula en función del total general de pedidos y envíos mensuales entregados. */
+
+
+/* Promedio mensual del valor asegurado (valor declarado por el usuario) de los paquetes enviados 
+a través del servicio de mensajería en función del tipo de paquete */
+
+
+/* Cantidad de reclamos mensuales recibidos por cada local en función del día de la semana y rango horario. */
+
+
+/*  Tiempo promedio de resolución de reclamos mensual según cada tipo de reclamo y rango etario de los operadores.
+El tiempo de resolución debe calcularse en minutos y representa la diferencia entre la fecha/hora en que se
+realizó el reclamo y la fecha/hora que se resolvió. */
+
+
+/* Monto mensual generado en cupones a partir de reclamos. */
