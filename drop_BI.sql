@@ -37,9 +37,9 @@ drop proc CARPINCHO_LOVERS.migrar_dimension_provincia_localidad
 drop proc CARPINCHO_LOVERS.migrar_dimension_tiempo
 drop proc CARPINCHO_LOVERS.migrar_dimension_rango_etario
 
---drop proc CARPINCHO_LOVERS.migrar_hechos_mensajeria
---drop proc CARPINCHO_LOVERS.migrar_hechos_pedidos
---drop proc CARPINCHO_LOVERS.migrar_hechos_reclamo
+drop proc CARPINCHO_LOVERS.migrar_hechos_mensajeria
+drop proc CARPINCHO_LOVERS.migrar_hechos_pedidos
+drop proc CARPINCHO_LOVERS.migrar_hechos_reclamo
 
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_dimension_rango_etario_id
