@@ -8,13 +8,13 @@
 
     create table CARPINCHO_LOVERS.dimension_dia_semana(
         dimension_dia_semana_id decimal(18, 0) not null identity(1, 1),
-        nombre nvarchar(50) not null unique
+        dia_nombre nvarchar(50) not null unique
     )
 
     create table CARPINCHO_LOVERS.dimension_provincia_localidad(
         dimension_provincia_localidad_id decimal(18, 0) not null identity(1, 1),
-        dimension_nombre_provincia nvarchar(255) not null,
-        dimension_nombre_localidad nvarchar(255) not null
+        dimension_localidad_provincia_nombre nvarchar(255) not null,
+        dimension_localidad_localidad_nombre nvarchar(255) not null
     )
 
     create table CARPINCHO_LOVERS.dimension_rango_horario(
@@ -268,7 +268,7 @@
         return(
             select dimension_dia_semana_id
             from CARPINCHO_LOVERS.dimension_dia_semana
-            where CARPINCHO_LOVERS.buscar_dimension_dia(@fecha) = nombre
+            where CARPINCHO_LOVERS.buscar_dimension_dia(@fecha) = dia_nombre
         )
     end
     go
@@ -307,7 +307,7 @@
             select dimension_provincia_localidad_id
             from CARPINCHO_LOVERS.provincia as t1
             join CARPINCHO_LOVERS.localidad as t2 on t1.provincia_id = t2.localidad_provincia_id
-            join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t3.dimension_nombre_provincia + t3.dimension_nombre_localidad = t1.provincia_nombre + t2.localidad_nombre
+            join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t3.dimension_localidad_provincia_nombre + t3.dimension_localidad_localidad_nombre = t1.provincia_nombre + t2.localidad_nombre
             where t2.localidad_id = @localidad
         )
     end
@@ -328,7 +328,7 @@
     -- DIMENSIONES --
     create proc CARPINCHO_LOVERS.migrar_dimension_dia_semana as
     begin
-        insert CARPINCHO_LOVERS.dimension_dia_semana(nombre)
+        insert CARPINCHO_LOVERS.dimension_dia_semana(dia_nombre)
         (
             select dia_nombre from CARPINCHO_LOVERS.dia
         )
@@ -337,7 +337,7 @@
 
     create proc CARPINCHO_LOVERS.migrar_dimension_provincia_localidad as
     begin
-        insert CARPINCHO_LOVERS.dimension_provincia_localidad(dimension_nombre_localidad, dimension_nombre_provincia)
+        insert CARPINCHO_LOVERS.dimension_provincia_localidad(dimension_localidad_localidad_nombre, dimension_localidad_provincia_nombre)
         (
             select localidad_nombre, provincia_nombre
             from localidad join provincia on localidad_provincia_id = provincia_id
@@ -654,8 +654,19 @@
 
     /* Día de la semana y franja horaria con mayor cantidad de pedidos según la
     localidad y categoría del local, para cada mes de cada año. */
+    create view CARPINCHO_LOVERS.mayor_cant_pedidos (dia, mes, anio, franja_horaria, localidad, provincia, categoria_local) as
+    select dia_nombre, mes, anio, horario_descripcion, dimension_localidad_localidad_nombre,
+        dimension_localidad_provincia_nombre, dimension_categoria_nombre, sum(cantidad_pedidos)
+    from CARPINCHO_LOVERS.hechos_pedidos as t1
+        join CARPINCHO_LOVERS.dimension_dia_semana as t2 on t1.dimension_dia_semana_id = t2.dimension_dia_semana_id
+        join CARPINCHO_LOVERS.dimension_tiempo as t3 on t1.dimension_tiempo_id = t3.dimension_tiempo_id
+        join CARPINCHO_LOVERS.dimension_rango_horario as t4 on t1.dimension_rango_horario_id = t4.dimension_rango_horario_id
+        join CARPINCHO_LOVERS.dimension_provincia_localidad as t5 on t1.dimension_provincia_localidad_id = t5.dimension_provincia_localidad_id
+        join CARPINCHO_LOVERS.dimension_categoria_local as t6 on t1.dimension_tipo_local_categoria_id = t6.dimension_tipo_local_categoria_id
+    group by dia_nombre, mes, anio, horario_descripcion, dimension_localidad_localidad_nombre,
+        dimension_localidad_provincia_nombre, dimension_categoria_nombre
 
-
+    
     /* Monto total no cobrado por cada local en función de los pedidos cancelados según el día de la semana y 
     la franja horaria (cuentan como pedidos cancelados tanto los que cancela el usuario como el local) */
 
