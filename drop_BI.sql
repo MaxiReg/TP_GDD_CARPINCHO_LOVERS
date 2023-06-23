@@ -51,3 +51,17 @@ drop function CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id
 drop function CARPINCHO_LOVERS.buscar_dimension_dia
 drop function CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id
 drop function CARPINCHO_LOVERS.calcular_desvio_de_entrega
+
+--DROP VIEWS
+drop view CARPINCHO_LOVERS.mayor_cant_pedidos
+drop view CARPINCHO_LOVERS.monto_total_no_cobrado
+drop view CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
+drop view CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
+drop view CARPINCHO_LOVERS.monto_total_cupones
+drop view CARPINCHO_LOVERS.promedio_calificacion_mensual
+drop view CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
+drop view CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
+drop view CARPINCHO_LOVERS.cantidad_reclamos_mensuales
+drop view CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
+drop view CARPINCHO_LOVERS.monto_generado_en_cupones
+

@@ -95,7 +95,8 @@
         dimension_tipo_medio_de_pago_id decimal(18,0) not null,
         dimension_tipo_paquete_id decimal(18,0) not null,
         dimension_rango_horario_id decimal(18,0) not null,
-        dimension_rango_etario_id decimal(18,0) not null,
+        dimension_rango_etario_usuario_id decimal(18,0) not null,
+        dimension_rango_etario_repartidor_id decimal(18,0) not null,
         valor_asegurado_total decimal(18,2) not null,
         desvio_tiempo_entrega_total decimal(18,2) not null,
         cantidad_envios decimal(18,2) not null
@@ -123,8 +124,8 @@
         dimension_tipo_movilidad_id decimal(18, 0) not null,
         dimension_local_id decimal(18, 0) not null,
         dimension_estado_pedido_id decimal(18, 0) not null,
-        dimension_rango_etario_usuario decimal(18, 0) not null,
-        dimension_rango_etario_repartidor decimal(18, 0) not null,
+        dimension_rango_etario_usuario_id decimal(18, 0) not null,
+        dimension_rango_etario_repartidor_id decimal(18, 0) not null,
         desvio_tiempo_entrega_total decimal(18, 2) not null,
         calificacion_total decimal(18, 2) not null,
         cantidad_pedidos decimal(18, 0) not null,
@@ -153,11 +154,12 @@
 
     -- Hechos
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint pk_hechos_mensajeria primary key (dimension_dia_semana_id, dimension_tiempo_id, dimension_estado_envio_mensajeria_id, 
-                    dimension_tipo_movilidad_id, dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, dimension_rango_horario_id, dimension_rango_etario_id)
+                    dimension_tipo_movilidad_id, dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, dimension_rango_horario_id, dimension_rango_etario_usuario_id,
+                    dimension_rango_etario_repartidor_id)
 
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint pk_hechos_pedidos primary key (dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id, 
-                    dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, dimension_rango_etario_usuario,
-                    dimension_rango_etario_repartidor)
+                    dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, dimension_rango_etario_usuario_id,
+                    dimension_rango_etario_repartidor_id)
 
     alter table CARPINCHO_LOVERS.hechos_reclamos add constraint pk_hechos_reclamos primary key (dimension_dia_semana_id, dimension_tiempo_id, dimension_local_id, dimension_estado_reclamo_id, 
                     dimension_rango_horario_id, dimension_rango_etario_id, dimension_tipo_reclamo_id)
@@ -180,7 +182,9 @@
             references CARPINCHO_LOVERS.dimension_tipo_paquete (dimension_tipo_paquete_id)
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_horario foreign key (dimension_rango_horario_id)
             references CARPINCHO_LOVERS.dimension_rango_horario (dimension_rango_horario_id)
-    alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario foreign key (dimension_rango_etario_id)
+    alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario_usuario foreign key (dimension_rango_etario_usuario_id)
+            references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
+    alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor_id)
             references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
 
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_dia_semana foreign key (dimension_dia_semana_id)
@@ -199,9 +203,9 @@
             references CARPINCHO_LOVERS.dimension_local (dimension_local_id)
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_estado_pedido foreign key (dimension_estado_pedido_id)
             references CARPINCHO_LOVERS.dimension_estado_pedido (dimension_estado_pedido_id)
-    alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_usuario foreign key (dimension_rango_etario_usuario)
+    alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_usuario foreign key (dimension_rango_etario_usuario_id)
             references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
-    alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor)
+    alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor_id)
             references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
 
     alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_dia_semana foreign key (dimension_dia_semana_id)
@@ -475,7 +479,8 @@
     begin
         insert CARPINCHO_LOVERS.hechos_mensajeria(dimension_dia_semana_id, dimension_tiempo_id, dimension_estado_envio_mensajeria_id, 
         dimension_tipo_movilidad_id, dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, 
-        dimension_rango_horario_id, dimension_rango_etario_id, valor_asegurado_total, desvio_tiempo_entrega_total, cantidad_envios)
+        dimension_rango_horario_id, dimension_rango_etario_usuario_id, dimension_rango_etario_repartidor_id, valor_asegurado_total,
+        desvio_tiempo_entrega_total, cantidad_envios)
 
                 select 
                 CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
@@ -498,6 +503,8 @@
                 CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
 
                 CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
+
+                CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac),
                 
                 sum(envio_mensajeria_valor_asegurado),
 
@@ -511,6 +518,7 @@
 				join CARPINCHO_LOVERS.paquete on envio_mensajeria_nro = paquete_envio_mensajeria_nro
 				join CARPINCHO_LOVERS.tipo_paquete on paquete_tipo_paquete = tipo_paquete_id
 				join CARPINCHO_LOVERS.usuario on envio_mensajeria_usuario_id = usuario_id
+                join CARPINCHO_LOVERS.repartidor on repartidor_id = envio_mensajeria_repartidor_id
 
             group by 
             CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
@@ -521,7 +529,8 @@
             tipo_medio_pago_descripcion,
             tipo_paquete_descripcion,
             CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
-            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac)
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac)
     end
     go
 
@@ -530,7 +539,7 @@
     begin
         insert CARPINCHO_LOVERS.hechos_pedidos(dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id,
         dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, 
-        dimension_rango_etario_usuario, dimension_rango_etario_repartidor, desvio_tiempo_entrega_total, calificacion_total, cantidad_pedidos,
+        dimension_rango_etario_usuario_id, dimension_rango_etario_repartidor_id, desvio_tiempo_entrega_total, calificacion_total, cantidad_pedidos,
         monto_pedidos_total, monto_envios_total, monto_cupones_total)
 
             select 
@@ -654,7 +663,7 @@
 
     /* Día de la semana y franja horaria con mayor cantidad de pedidos según la
     localidad y categoría del local, para cada mes de cada año. */
-    create view CARPINCHO_LOVERS.mayor_cant_pedidos (dia, mes, anio, franja_horaria, localidad, provincia, categoria_local) as
+    create view CARPINCHO_LOVERS.mayor_cant_pedidos (dia, mes, anio, franja_horaria, localidad, provincia, categoria_local, cantidad_pedidos) as
     select dia_nombre, mes, anio, horario_descripcion, dimension_localidad_localidad_nombre,
         dimension_localidad_provincia_nombre, dimension_categoria_nombre, sum(cantidad_pedidos)
     from CARPINCHO_LOVERS.hechos_pedidos as t1
@@ -671,17 +680,17 @@
     /* Monto total no cobrado por cada local en función de los pedidos cancelados según el día de la semana y 
     la franja horaria (cuentan como pedidos cancelados tanto los que cancela el usuario como el local) */
     create view CARPINCHO_LOVERS.monto_total_no_cobrado(dia, franja_horaria, local, monto) as
-    select dia_nombre, horario_descripcion, dimension_local_nombre, sum(monto_total_pedidos) -- Queremos tomar solo los cancelados y hacer un sum de esos
+    select dia_nombre, horario_descripcion, dimension_local_nombre, sum(monto_pedidos_total) -- Queremos tomar solo los cancelados y hacer un sum de esos
     from CARPINCHO_LOVERS.hechos_pedidos as t1
         join CARPINCHO_LOVERS.dimension_dia_semana as t2 on t1.dimension_dia_semana_id = t2.dimension_dia_semana_id
         join CARPINCHO_LOVERS.dimension_rango_horario as t3 on t1.dimension_rango_horario_id = t3.dimension_rango_horario_id
         join CARPINCHO_LOVERS.dimension_local as t4 on t1.dimension_local_id = t4.dimension_local_id
         join CARPINCHO_LOVERS.dimension_estado_pedido as t5 on t1.dimension_estado_pedido_id = t5.dimension_estado_pedido_id
-    where t1.dimension_estado_pedido_descripcion = 'Estado Pedido Cancelado' -- t1?
+    where t5.dimension_estado_pedido_descripcion = 'Estado Pedido Cancelado'
     group by dia_nombre, horario_descripcion, dimension_local_nombre
-
+    
     GO
-
+    
     /*  Valor promedio mensual que tienen los envíos de pedidos en cada localidad. */
    
     create view CARPINCHO_LOVERS.promedio_mensual_envios_pedidos(anio, mes, localidad, monto_promedio) as
@@ -698,27 +707,34 @@
     Este indicador debe tener en cuenta todos los envíos, es decir, sumar tanto los envíos de pedidos como los de mensajería. */
     
     create view CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega(dia, franja_horaria, tipo_movilidad, desvio_promedio_tiempo_entrega) as
-    select dia_nombre, horario_descripcion, dimension_movilidad_tipo_descripcion, sum(desvio_tiempo_entrega_total)/sum(cantidad_pedidos)
-    from CARPINCHO_LOVERS.hechos_pedidos as t1
-        join CARPINCHO_LOVERS.dimension_dia_semana as t2 on t1.dimension_dia_semana = t2.dimension_dia_semana
-        join CARPINCHO_LOVERS.dimension_tipo_movilidad as t3 on t1.dimension_tipo_movilidad_id = t3.dimension_tipo_movilidad_id
-        join CARPINCHO_LOVERS.dimension_rango_horario as t4 on t1.dimension_rango_horario_id = t4.dimension_rango_horario_id
+    select dia_nombre, horario_descripcion, dimension_movilidad_tipo_descripcion, 
+        sum(isnull(t1.desvio_tiempo_entrega_total, 0) + isnull(t2.desvio_tiempo_entrega_total, 0))/sum(isnull(cantidad_pedidos,0) + isnull(cantidad_envios, 0))
+    from CARPINCHO_LOVERS.hechos_pedidos as t1 
+        join CARPINCHO_LOVERS.hechos_mensajeria as t2 on  (t2.dimension_dia_semana_id = t1.dimension_dia_semana_id and
+                                                           t2.dimension_rango_horario_id = t1.dimension_rango_horario_id and
+                                                           t2.dimension_tipo_movilidad_id = t1.dimension_tipo_movilidad_id)
+        join CARPINCHO_LOVERS.dimension_dia_semana as t3 on t1.dimension_dia_semana_id = t3.dimension_dia_semana_id
+        join CARPINCHO_LOVERS.dimension_tipo_movilidad as t4 on t1.dimension_tipo_movilidad_id = t4.dimension_tipo_movilidad_id
+        join CARPINCHO_LOVERS.dimension_rango_horario as t5 on t1.dimension_rango_horario_id = t5.dimension_rango_horario_id
 
     group by dia_nombre, horario_descripcion, dimension_movilidad_tipo_descripcion
-    
+
     go
 
+
     /* Monto total de los cupones utilizados por mes en función del rango etario de los usuarios. */
+
     create view CARPINCHO_LOVERS.monto_total_cupones(anio, mes, rango_etario_usuario, monto) as
-    select anio, mes, dimension_rango_etario_descripcion, sum(monto_total_cupones)
+    select anio, mes, edad_descripcion, sum(monto_cupones_total)
     from CARPINCHO_LOVERS.hechos_pedidos as t1
         join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
-        join CARPINCHO_LOVERS.dimension_rango_etario as t3 on t1.dimension_rango_etario_id = t3.dimension_rango_etario_id
-    group by anio, mes, dimension_rango_etario_descripcion
+        join CARPINCHO_LOVERS.dimension_rango_etario as t3 on t1.dimension_rango_etario_usuario_id = t3.dimension_rango_etario_id
+    group by anio, mes, edad_descripcion
     
     go
     
     /* Promedio de calificación mensual por local. */
+
     create view CARPINCHO_LOVERS.promedio_calificacion_mensual(anio, mes, local, calificacion_promedio) as
     select anio, mes, dimension_local_nombre, sum(calificacion_total)/sum(cantidad_pedidos)
     from CARPINCHO_LOVERS.hechos_pedidos as t1
@@ -729,28 +745,45 @@
     go
 
     /* Porcentaje de pedidos y mensajería entregados mensualmente según el rango etario de los repartidores y la localidad.     <------------   hecho solo para pedidos
-    Este indicador se debe tener en cuenta y sumar tanto los envíos de pedidos como los de mensajería.
+    Este indicador se debe tener en cuenta y sumar tanto los envíos de pedidos como los de mensajería. 
     El porcentaje se calcula en función del total general de pedidos y envíos mensuales entregados. */
+
     create view CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados(anio, mes, rango_etario_repartidor, localidad, porcentaje_entregados) as
-    select anio, mes, edad_descripcion, dimension_localidad_localidad_nombre, sum(cantidad_pedidos)/(sum(cantidad_pedidos) + (select sum(cantidad_envios) 
-                                                                                                                              from CARPINCHO_LOVERS.hechos_mensajeria as t6
-                                                                                                                              join CARPINCHO_LOVERS.dimension_estado_envio_mensajeria as t7 on t6.dimension_estado_envio_mensajeria_id = t7.dimension_estado_envio_mensajeria_id
-                                                                                                                              where dimension_estado_mensajeria_descripcion = 'Estado Mensajeria Entregado'))* 100
+    select anio, mes, edad_descripcion, dimension_localidad_localidad_nombre,
+
+    (sum(cantidad_pedidos + cantidad_envios)*100
+    /
+        (select sum(cantidad_pedidos) from CARPINCHO_LOVERS.hechos_pedidos as ts where 
+            ts.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id and
+            ts.dimension_tiempo_id = t1.dimension_tiempo_id and
+            ts.dimension_rango_etario_repartidor_id = t1.dimension_rango_etario_repartidor_id)
+     + 
+        (select sum(cantidad_envios) from CARPINCHO_LOVERS.hechos_mensajeria as ts where
+            ts.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id and
+            ts.dimension_tiempo_id = t1.dimension_tiempo_id and
+            ts.dimension_rango_etario_repartidor_id = t1.dimension_rango_etario_repartidor_id))
+    
     from CARPINCHO_LOVERS.hechos_pedidos as t1
-        join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
-        join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t1.dimension_provincia_localidad_id = t3.dimension_provincia_localidad_id
-        join CARPINCHO_LOVERS.dimension_rango_etario as t4 on t1.dimension_rango_etario_id = t4.dimension_rango_etario_id
-        join CARPINCHO_LOVERS.dimension_estado_pedido as t5 on t1.dimension_estado_pedido_id = t5.dimension_estado_pedido_id
-    where dimension_estado_pedido_descripcion = 'Estado Pedido Entregado'
-    group by anio, mes, edad_descripcion, dimension_localidad_localidad_nombre
+        join CARPINCHO_LOVERS.hechos_mensajeria as t2 on  (t2.dimension_tiempo_id = t1.dimension_tiempo_id and
+                                                           t2.dimension_rango_etario_repartidor_id = t1.dimension_rango_etario_repartidor_id and
+                                                            t2.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id)
+        join CARPINCHO_LOVERS.dimension_tiempo as t3 on t1.dimension_tiempo_id = t3.dimension_tiempo_id
+        join CARPINCHO_LOVERS.dimension_provincia_localidad as t4 on t1.dimension_provincia_localidad_id = t4.dimension_provincia_localidad_id
+        join CARPINCHO_LOVERS.dimension_rango_etario as t5 on t1.dimension_rango_etario_repartidor_id = t5.dimension_rango_etario_id
+        join CARPINCHO_LOVERS.dimension_estado_pedido as t6 on t1.dimension_estado_pedido_id = t6.dimension_estado_pedido_id
+        join CARPINCHO_LOVERS.dimension_estado_envio_mensajeria as t7 on t2.dimension_estado_envio_mensajeria_id = t7.dimension_estado_envio_mensajeria_id
+    where dimension_estado_pedido_descripcion = 'Estado Pedido Entregado' or dimension_estado_mensajeria_descripcion = 'Estado Mensajeria Entregado'
+    group by anio, mes, edad_descripcion, dimension_localidad_localidad_nombre,
+        t1.dimension_provincia_localidad_id, t1.dimension_tiempo_id, t1.dimension_rango_etario_repartidor_id
     
     go
 
     /* Promedio mensual del valor asegurado (valor declarado por el usuario) de los paquetes enviados 
     a través del servicio de mensajería en función del tipo de paquete */
+
     create view CARPINCHO_LOVERS.promedio_valor_asegurado_mensual(anio, mes, tipo_paquete, valor_asegurado_promedio) as
     select anio, mes, dimension_tipo_paquete_descripcion, sum(valor_asegurado_total)/sum(cantidad_envios)
-    from CARPINCHO_LOVERS.hechos_pedidos as t1
+    from CARPINCHO_LOVERS.hechos_mensajeria as t1
         join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
         join CARPINCHO_LOVERS.dimension_tipo_paquete as t3 on t1.dimension_tipo_paquete_id = t3.dimension_tipo_paquete_id
     group by anio, mes, dimension_tipo_paquete_descripcion
@@ -758,6 +791,7 @@
     go
 
     /* Cantidad de reclamos mensuales recibidos por cada local en función del día de la semana y rango horario. */
+
     create view CARPINCHO_LOVERS.cantidad_reclamos_mensuales(anio, mes, dia, rango_horario, local, cant_reclamos) as -- Discrimina por anio o junta los meses??
     select anio, mes, dia_nombre, horario_descripcion, dimension_local_nombre, sum(cantidad_reclamos)
     from CARPINCHO_LOVERS.hechos_reclamos as t1
@@ -768,24 +802,42 @@
     group by anio, mes, dia_nombre, horario_descripcion, dimension_local_nombre
 
     go
+    
     /*  Tiempo promedio de resolución de reclamos mensual según cada tipo de reclamo y rango etario de los operadores.
     El tiempo de resolución debe calcularse en minutos y representa la diferencia entre la fecha/hora en que se
     realizó el reclamo y la fecha/hora que se resolvió. */
     
     create view CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos(anio, mes, tipo_reclamo, rango_etario_operador, tiempo_resolucion_promedio) as
-    select anio, mes, dimension_tipo_reclamo, edad_descripcion, sum(tiempo_resolucion_total)/sum(cantidad_reclamos)
+    select anio, mes, dimension_reclamo_tipo_descripcion, edad_descripcion, sum(tiempo_resolucion_total)/sum(cantidad_reclamos)
     from CARPINCHO_LOVERS.hechos_reclamos as t1
         join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
         join CARPINCHO_LOVERS.dimension_tipo_reclamo as t3 on t1.dimension_tipo_reclamo_id = t3.dimension_tipo_reclamo_id
         join CARPINCHO_LOVERS.dimension_rango_etario as t4 on t1.dimension_rango_etario_id = t4.dimension_rango_etario_id
-    group by anio, mes, dimension_tipo_reclamo, edad_descripcion
+    group by anio, mes, dimension_reclamo_tipo_descripcion, edad_descripcion
     
     go
 
     /* Monto mensual generado en cupones a partir de reclamos. */
+
     create view CARPINCHO_LOVERS.monto_generado_en_cupones(anio, mes, monto) as -- Asumimos que discrimina por anio
     select anio, mes, sum(monto_cupones)
     from CARPINCHO_LOVERS.hechos_reclamos as t1
         join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
     group by anio, mes
 
+    go
+    
+    ------- CONSULTA VIEWS --------
+/*
+    select * from CARPINCHO_LOVERS.mayor_cant_pedidos
+    select * from CARPINCHO_LOVERS.monto_total_no_cobrado
+    select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
+    select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
+    select * from CARPINCHO_LOVERS.monto_total_cupones
+    select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
+    select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
+    select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
+    select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
+    select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
+    select * from CARPINCHO_LOVERS.monto_generado_en_cupones
+*/
