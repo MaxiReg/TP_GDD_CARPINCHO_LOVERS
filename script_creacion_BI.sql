@@ -90,15 +90,12 @@
         dimension_dia_semana_id decimal(18,0) not null,
         dimension_tiempo_id decimal(18,0) not null,
         dimension_estado_envio_mensajeria_id decimal(18,0) not null,
-        dimension_tipo_movilidad_id decimal(18,0) not null,
         dimension_provincia_localidad_id decimal(18,0) not null,
         dimension_tipo_medio_de_pago_id decimal(18,0) not null,
         dimension_tipo_paquete_id decimal(18,0) not null,
         dimension_rango_horario_id decimal(18,0) not null,
-        dimension_rango_etario_usuario_id decimal(18,0) not null,
-        dimension_rango_etario_repartidor_id decimal(18,0) not null,
+        dimension_rango_etario_usuario_id decimal(18,0) not null, 
         valor_asegurado_total decimal(18,2) not null,
-        desvio_tiempo_entrega_total decimal(18,2) not null,
         cantidad_envios decimal(18,2) not null
     )
 
@@ -120,18 +117,28 @@
         dimension_rango_horario_id decimal(18, 0) not null,
         dimension_provincia_localidad_id decimal(18, 0) not null,
         dimension_tipo_local_categoria_id decimal(18, 0) not null,
-        dimension_tiempo_id decimal(18, 0) not null,
-        dimension_tipo_movilidad_id decimal(18, 0) not null,
+        dimension_tiempo_id decimal(18, 0) not null, -- borre tipo mov, repartidor, desvio
         dimension_local_id decimal(18, 0) not null,
         dimension_estado_pedido_id decimal(18, 0) not null,
         dimension_rango_etario_usuario_id decimal(18, 0) not null,
-        dimension_rango_etario_repartidor_id decimal(18, 0) not null,
-        desvio_tiempo_entrega_total decimal(18, 2) not null,
         calificacion_total decimal(18, 2) not null,
         cantidad_pedidos decimal(18, 0) not null,
         monto_pedidos_total decimal(18, 2) not null,
         monto_envios_total decimal(18, 2) not null,
         monto_cupones_total decimal(18, 2) not null
+    )
+
+    create table CARPINCHO_LOVERS.hechos_envios(
+        dimension_dia_semana_id decimal(18, 0) not null,
+        dimension_rango_horario_id decimal(18, 0) not null,
+        dimension_provincia_localidad_id decimal(18, 0) not null,
+        dimension_tiempo_id decimal(18, 0) not null,
+        dimension_tipo_movilidad_id decimal(18, 0) not null,
+        dimension_estado_pedido_id decimal(18, 0) not null,
+        dimension_estado_envio_mensajeria_id decimal(18,0) not null,
+        dimension_rango_etario_repartidor_id decimal(18, 0) not null,
+        desvio_tiempo_entrega_total decimal(18,2) not null,
+        cantidad_envios decimal(18,2) not null
     )
     go
 
@@ -154,15 +161,16 @@
 
     -- Hechos
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint pk_hechos_mensajeria primary key (dimension_dia_semana_id, dimension_tiempo_id, dimension_estado_envio_mensajeria_id, 
-                    dimension_tipo_movilidad_id, dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, dimension_rango_horario_id, dimension_rango_etario_usuario_id,
-                    dimension_rango_etario_repartidor_id)
+                    dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, dimension_rango_horario_id, dimension_rango_etario_usuario_id)
 
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint pk_hechos_pedidos primary key (dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id, 
-                    dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, dimension_rango_etario_usuario_id,
-                    dimension_rango_etario_repartidor_id)
+                    dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_local_id, dimension_estado_pedido_id, dimension_rango_etario_usuario_id)
 
     alter table CARPINCHO_LOVERS.hechos_reclamos add constraint pk_hechos_reclamos primary key (dimension_dia_semana_id, dimension_tiempo_id, dimension_local_id, dimension_estado_reclamo_id, 
                     dimension_rango_horario_id, dimension_rango_etario_id, dimension_tipo_reclamo_id)
+
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint pk_hechos_envios primary key (dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id, 
+                    dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_estado_pedido_id, dimension_estado_envio_mensajeria_id, dimension_rango_etario_repartidor_id)
 
     -------- FKs --------
     -- Hechos
@@ -172,8 +180,6 @@
             references CARPINCHO_LOVERS.dimension_tiempo (dimension_tiempo_id)
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_estado_envio_mensajeria foreign key (dimension_estado_envio_mensajeria_id)
             references CARPINCHO_LOVERS.dimension_estado_envio_mensajeria (dimension_estado_envio_mensajeria_id)
-    alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_movilidad foreign key (dimension_tipo_movilidad_id)
-            references CARPINCHO_LOVERS.dimension_tipo_movilidad (dimension_tipo_movilidad_id)
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_provincia_localidad foreign key (dimension_provincia_localidad_id)
             references CARPINCHO_LOVERS.dimension_provincia_localidad (dimension_provincia_localidad_id)
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_tipo_medio_de_pago foreign key (dimension_tipo_medio_de_pago_id)
@@ -183,8 +189,6 @@
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_horario foreign key (dimension_rango_horario_id)
             references CARPINCHO_LOVERS.dimension_rango_horario (dimension_rango_horario_id)
     alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario_usuario foreign key (dimension_rango_etario_usuario_id)
-            references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
-    alter table CARPINCHO_LOVERS.hechos_mensajeria add constraint fk_hecho_mensajeria_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor_id)
             references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
 
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_dia_semana foreign key (dimension_dia_semana_id)
@@ -197,15 +201,11 @@
             references CARPINCHO_LOVERS.dimension_categoria_local (dimension_tipo_local_categoria_id)
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tiempo foreign key (dimension_tiempo_id)
             references CARPINCHO_LOVERS.dimension_tiempo (dimension_tiempo_id)
-    alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_tipo_movilidad foreign key (dimension_tipo_movilidad_id)
-            references CARPINCHO_LOVERS.dimension_tipo_movilidad (dimension_tipo_movilidad_id)
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_local foreign key (dimension_local_id)
             references CARPINCHO_LOVERS.dimension_local (dimension_local_id)
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_estado_pedido foreign key (dimension_estado_pedido_id)
             references CARPINCHO_LOVERS.dimension_estado_pedido (dimension_estado_pedido_id)
     alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_usuario foreign key (dimension_rango_etario_usuario_id)
-            references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
-    alter table CARPINCHO_LOVERS.hechos_pedidos add constraint fk_hecho_pedido_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor_id)
             references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
 
     alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_dia_semana foreign key (dimension_dia_semana_id)
@@ -222,6 +222,24 @@
             references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
     alter table CARPINCHO_LOVERS.hechos_reclamos add constraint fk_hecho_reclamo_dimension_tipo_reclamo foreign key (dimension_tipo_reclamo_id)
             references CARPINCHO_LOVERS.dimension_tipo_reclamo (dimension_tipo_reclamo_id)
+    
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_dia_semana foreign key (dimension_dia_semana_id)
+            references CARPINCHO_LOVERS.dimension_dia_semana (dimension_dia_semana_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_rango_horario foreign key (dimension_rango_horario_id)
+            references CARPINCHO_LOVERS.dimension_rango_horario (dimension_rango_horario_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_provincia_localidad foreign key (dimension_provincia_localidad_id)
+            references CARPINCHO_LOVERS.dimension_provincia_localidad (dimension_provincia_localidad_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_tiempo foreign key (dimension_tiempo_id)
+            references CARPINCHO_LOVERS.dimension_tiempo (dimension_tiempo_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_tipo_movilidad foreign key (dimension_tipo_movilidad_id)
+            references CARPINCHO_LOVERS.dimension_tipo_movilidad (dimension_tipo_movilidad_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_estado_pedido foreign key (dimension_estado_pedido_id)
+            references CARPINCHO_LOVERS.dimension_estado_pedido (dimension_estado_pedido_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_estado_mensajeria foreign key (dimension_estado_envio_mensajeria_id)
+            references CARPINCHO_LOVERS.dimension_estado_envio_mensajeria (dimension_estado_envio_mensajeria_id)
+    alter table CARPINCHO_LOVERS.hechos_envios add constraint fk_hecho_envio_dimension_rango_etario_repartidor foreign key (dimension_rango_etario_repartidor_id)
+            references CARPINCHO_LOVERS.dimension_rango_etario (dimension_rango_etario_id)
+
     go
 
     -------- Funciones --------
@@ -478,9 +496,8 @@
     create proc CARPINCHO_LOVERS.migrar_hechos_mensajeria as
     begin
         insert CARPINCHO_LOVERS.hechos_mensajeria(dimension_dia_semana_id, dimension_tiempo_id, dimension_estado_envio_mensajeria_id, 
-        dimension_tipo_movilidad_id, dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, 
-        dimension_rango_horario_id, dimension_rango_etario_usuario_id, dimension_rango_etario_repartidor_id, valor_asegurado_total,
-        desvio_tiempo_entrega_total, cantidad_envios)
+        dimension_provincia_localidad_id, dimension_tipo_medio_de_pago_id, dimension_tipo_paquete_id, 
+        dimension_rango_horario_id, dimension_rango_etario_usuario_id, valor_asegurado_total, cantidad_envios)
 
                 select 
                 CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
@@ -489,8 +506,6 @@
 
                 (select dimension_estado_envio_mensajeria_id from CARPINCHO_LOVERS.dimension_estado_envio_mensajeria 
                     where estado_mensajeria_descripcion = dimension_estado_mensajeria_descripcion),
-                
-                CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_mensajeria_repartidor_id),
 
                 CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(envio_mensajeria_localidad_origen),
                 
@@ -503,13 +518,9 @@
                 CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
 
                 CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
-
-                CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac),
                 
                 sum(envio_mensajeria_valor_asegurado),
-
-                sum(CARPINCHO_LOVERS.calcular_desvio_de_entrega(envio_mensajeria_fecha, envio_mensajeria_fecha_entrega, envio_mensajeria_tiempo_estimado)),
-
+                
                 count(*)
 
             from CARPINCHO_LOVERS.envio_mensajeria 
@@ -518,19 +529,16 @@
 				join CARPINCHO_LOVERS.paquete on envio_mensajeria_nro = paquete_envio_mensajeria_nro
 				join CARPINCHO_LOVERS.tipo_paquete on paquete_tipo_paquete = tipo_paquete_id
 				join CARPINCHO_LOVERS.usuario on envio_mensajeria_usuario_id = usuario_id
-                join CARPINCHO_LOVERS.repartidor on repartidor_id = envio_mensajeria_repartidor_id
 
             group by 
             CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
             CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(envio_mensajeria_fecha), month(envio_mensajeria_fecha)),
             estado_mensajeria_descripcion,
-            CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_mensajeria_repartidor_id),
             CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(envio_mensajeria_localidad_origen),
             tipo_medio_pago_descripcion,
             tipo_paquete_descripcion,
             CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
-            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
-            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac)
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac)
     end
     go
 
@@ -538,8 +546,8 @@
     create proc CARPINCHO_LOVERS.migrar_hechos_pedidos as
     begin
         insert CARPINCHO_LOVERS.hechos_pedidos(dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id,
-        dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_tipo_movilidad_id, dimension_local_id, dimension_estado_pedido_id, 
-        dimension_rango_etario_usuario_id, dimension_rango_etario_repartidor_id, desvio_tiempo_entrega_total, calificacion_total, cantidad_pedidos,
+        dimension_tipo_local_categoria_id, dimension_tiempo_id, dimension_local_id, dimension_estado_pedido_id, 
+        dimension_rango_etario_usuario_id, calificacion_total, cantidad_pedidos,
         monto_pedidos_total, monto_envios_total, monto_cupones_total)
 
             select 
@@ -549,14 +557,11 @@
                 (select dimension_tipo_local_categoria_id from CARPINCHO_LOVERS.dimension_categoria_local 
                     where categoria_nombre = dimension_categoria_nombre),
                 CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(pedido_fecha), month(pedido_fecha)),
-                CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_pedido_repartidor_id),
                 (select dimension_local_id from CARPINCHO_LOVERS.dimension_local
                     where dimension_local_id = local_id),
                 (select dimension_estado_pedido_id from CARPINCHO_LOVERS.dimension_estado_pedido
                     where estado_pedido_descripcion = dimension_estado_pedido_descripcion),
                 CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
-                CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac),
-                sum(CARPINCHO_LOVERS.calcular_desvio_de_entrega(pedido_fecha, pedido_fecha_entrega, pedido_tiempo_estimado_entrega)),
                 sum(pedido_calificacion),
                 count(*),
                 sum(pedido_total_servicio),
@@ -569,7 +574,6 @@
                 join CARPINCHO_LOVERS.envio_pedido on envio_pedido_nro = pedido_nro
                 join CARPINCHO_LOVERS.estado_pedido on estado_pedido_id = pedido_estado
                 join CARPINCHO_LOVERS.usuario on pedido_usuario_id = usuario_id
-                join CARPINCHO_LOVERS.repartidor on repartidor_id = envio_pedido_repartidor_id
 			group by 
                 CARPINCHO_LOVERS.buscar_dimension_dia_id(pedido_fecha),
                 CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(pedido_fecha),
@@ -578,9 +582,7 @@
                 CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(pedido_fecha), month(pedido_fecha)),
                 local_id,
                 estado_pedido_descripcion,
-                CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_pedido_repartidor_id),
-                CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac),
-                CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac)
+                CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(usuario_fecha_nac)
     end
     go
 
@@ -638,6 +640,71 @@
     end
     GO
 
+    create proc CARPINCHO_LOVERS.migrar_hechos_envios as
+    begin
+        insert CARPINCHO_LOVERS.hechos_envios(dimension_dia_semana_id, dimension_rango_horario_id, dimension_provincia_localidad_id,
+        dimension_tiempo_id, dimension_tipo_movilidad, dimension_estado_pedido_id, dimension_estado_envio_mensajeria,
+        dimension_rango_etario_repartidor_id, desvio_tiempo_entrega_total, cantidad_pedidos, cantidad_envios)
+
+            select 
+            CARPINCHO_LOVERS.buscar_dimension_dia_id(pedido_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(pedido_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(local_localidad),
+            CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(pedido_fecha), month(pedido_fecha)),
+            CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_pedido_repartidor_id),
+            (select dimension_estado_pedido_id from CARPINCHO_LOVERS.dimension_estado_pedido
+                where estado_pedido_descripcion = dimension_estado_pedido_descripcion),
+            null,
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac),
+            sum(CARPINCHO_LOVERS.calcular_desvio_de_entrega(pedido_fecha, pedido_fecha_entrega, pedido_tiempo_estimado_entrega)),
+            count(*),
+            null
+        from CARPINCHO_LOVERS.pedido as t1
+            join CARPINCHO_LOVERS.envio_pedido as t2 on t2.envio_pedido_nro = t1.pedido_nro
+            join CARPINCHO_LOVERS.estado_pedido as t3 on t3.estado_pedido_id = t1.pedido_estado
+			join CARPINCHO_LOVERS.local as t4 on t1.pedido_local_id = t4.local_id
+            join CARPINCHO_LOVERS.repartidor as t5 on t2.envio_pedido_repartidor_id = t5.repartidor_id
+		group by 
+            CARPINCHO_LOVERS.buscar_dimension_dia_id(pedido_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(pedido_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(local_localidad),
+            CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(pedido_fecha), month(pedido_fecha)),
+            CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_pedido_repartidor_id),
+            estado_pedido_descripcion,
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac)
+
+        union
+
+        select 
+            CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
+            CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(envio_mensajeria_localidad_origen),
+            CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(envio_mensajeria_fecha), month(envio_mensajeria_fecha)),
+            CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_mensajeria_repartidor_id),
+            null,
+            (select dimension_estado_envio_mensajeria_id from CARPINCHO_LOVERS.dimension_estado_envio_mensajeria 
+                where estado_mensajeria_descripcion = dimension_estado_mensajeria_descripcion),
+            CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac),
+            sum(CARPINCHO_LOVERS.calcular_desvio_de_entrega(envio_mensajeria_fecha, envio_mensajeria_fecha_entrega, envio_mensajeria_tiempo_estimado)),
+            null,
+            count(*)
+
+        from CARPINCHO_LOVERS.envio_mensajeria 
+            join CARPINCHO_LOVERS.estado_envio_mensajeria on envio_mensajeria_estado = estado_mensajeria_id
+			join CARPINCHO_LOVERS.repartidor on envio_mensajeria_repartidor_id = repartidor_id
+
+        group by 
+        CARPINCHO_LOVERS.buscar_dimension_dia_id(envio_mensajeria_fecha),
+        CARPINCHO_LOVERS.buscar_dimension_rango_horario_id(envio_mensajeria_fecha),
+        CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id(envio_mensajeria_localidad_origen),
+        CARPINCHO_LOVERS.buscar_dimension_tiempo_id(year(envio_mensajeria_fecha), month(envio_mensajeria_fecha)),
+        CARPINCHO_LOVERS.buscar_dimension_tipo_movilidad_id(envio_mensajeria_repartidor_id),
+        estado_mensajeria_descripcion,
+        CARPINCHO_LOVERS.buscar_dimension_rango_etario_id(repartidor_fecha_nac) 
+
+    end
+    go
+
     --EXECS
 
     exec CARPINCHO_LOVERS.migrar_dimension_categoria_local
@@ -657,6 +724,7 @@
     exec CARPINCHO_LOVERS.migrar_hechos_mensajeria
     exec CARPINCHO_LOVERS.migrar_hechos_pedidos
     exec CARPINCHO_LOVERS.migrar_hechos_reclamo
+    exec CARPINCHO_LOVERS.migrar_hechos_envios
     go
 
     ------- Views --------
