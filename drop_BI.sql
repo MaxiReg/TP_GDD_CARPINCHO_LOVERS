@@ -55,6 +55,7 @@ drop function CARPINCHO_LOVERS.buscar_dimension_provincia_localidad_id
 drop function CARPINCHO_LOVERS.calcular_desvio_de_entrega
 
 --DROP VIEWS
+drop view CARPINCHO_LOVERS.vista_general_envios
 drop view CARPINCHO_LOVERS.mayor_cant_pedidos
 drop view CARPINCHO_LOVERS.monto_total_no_cobrado
 drop view CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
