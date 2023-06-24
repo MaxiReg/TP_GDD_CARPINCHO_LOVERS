@@ -718,7 +718,7 @@
         join CARPINCHO_LOVERS.dimension_rango_horario as t3 on t1.dimension_rango_horario_id = t3.dimension_rango_horario_id
         join CARPINCHO_LOVERS.dimension_local as t4 on t1.dimension_local_id = t4.dimension_local_id
         join CARPINCHO_LOVERS.dimension_estado_pedido as t5 on t1.dimension_estado_pedido_id = t5.dimension_estado_pedido_id
-    where t5.dimension_estado_pedido_descripcion = 'Estado Pedido Cancelado'
+    where t5.dimension_estado_pedido_descripcion = 'Estado Mensajeria Cancelado'
     group by dia_nombre, horario_descripcion, dimension_local_nombre
     
     GO
@@ -846,15 +846,15 @@
     
     ------- CONSULTA VIEWS --------
 /*
-    select * from CARPINCHO_LOVERS.mayor_cant_pedidos
-    select * from CARPINCHO_LOVERS.monto_total_no_cobrado
-    select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
-    select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
-    select * from CARPINCHO_LOVERS.monto_total_cupones
-    select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
-    select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
-    select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
-    select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
-    select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
-    select * from CARPINCHO_LOVERS.monto_generado_en_cupones
+        select * from CARPINCHO_LOVERS.mayor_cant_pedidos
+        select * from CARPINCHO_LOVERS.monto_total_no_cobrado
+        select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
+        select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
+        select * from CARPINCHO_LOVERS.monto_total_cupones
+        select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
+        select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
+        select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
+        select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
+        select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
+        select * from CARPINCHO_LOVERS.monto_generado_en_cupones
 */
