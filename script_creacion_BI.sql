@@ -845,14 +845,17 @@
     go
     
     ------- CONSULTA VIEWS --------
-select * from CARPINCHO_LOVERS.mayor_cant_pedidos
-select * from CARPINCHO_LOVERS.monto_total_no_cobrado
-select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
-select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
-select * from CARPINCHO_LOVERS.monto_total_cupones
-select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
-select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
-select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
-select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
-select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
-select * from CARPINCHO_LOVERS.monto_generado_en_cupones
+	-- Comentadas para poder ejecutar una a la vez
+	/*
+	select * from CARPINCHO_LOVERS.mayor_cant_pedidos
+	select * from CARPINCHO_LOVERS.monto_total_no_cobrado
+	select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
+	select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
+	select * from CARPINCHO_LOVERS.monto_total_cupones
+	select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
+	select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
+	select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
+	select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
+	select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
+	select * from CARPINCHO_LOVERS.monto_generado_en_cupones
+	*/
