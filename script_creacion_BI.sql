@@ -695,37 +695,38 @@
 
     /* Día de la semana y franja horaria con mayor cantidad de pedidos según la
     localidad y categoría del local, para cada mes de cada año. */
+    localidad y categoría del local, para cada mes de cada año. */
     create view CARPINCHO_LOVERS.mayor_cant_pedidos (dia, franja_horaria, mes, anio, localidad, provincia, categoria_local) as
     
-    select 
-            (select top 1 dia_nombre
-                from CARPINCHO_LOVERS.hechos_pedidos as ts
-                    join CARPINCHO_LOVERS.dimension_dia_semana as ts2 on ts.dimension_dia_semana_id = ts2.dimension_dia_semana_id
-                    join CARPINCHO_LOVERS.dimension_rango_horario as ts3 on ts.dimension_rango_horario_id = ts3.dimension_rango_horario_id
-                where  ts.dimension_tiempo_id = t1.dimension_tiempo_id 
-                    and ts.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id 
-                    and ts.dimension_tipo_local_categoria_id = t1.dimension_tipo_local_categoria_id
-                group by dia_nombre, horario_descripcion
-            order by sum(cantidad_pedidos) desc) as dia_nombre,
+        select 
+                (select top 1 dia_nombre
+                    from CARPINCHO_LOVERS.hechos_pedidos as ts
+                        join CARPINCHO_LOVERS.dimension_dia_semana as ts2 on ts.dimension_dia_semana_id = ts2.dimension_dia_semana_id
+                        join CARPINCHO_LOVERS.dimension_rango_horario as ts3 on ts.dimension_rango_horario_id = ts3.dimension_rango_horario_id
+                    where  ts.dimension_tiempo_id = t1.dimension_tiempo_id 
+                        and ts.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id 
+                        and ts.dimension_tipo_local_categoria_id = t1.dimension_tipo_local_categoria_id
+                    group by dia_nombre, horario_descripcion
+                order by sum(cantidad_pedidos) desc) as dia_nombre,
 
-            (select top 1 horario_descripcion
-                from CARPINCHO_LOVERS.hechos_pedidos as ts
-                    join CARPINCHO_LOVERS.dimension_dia_semana as ts2 on ts.dimension_dia_semana_id = ts2.dimension_dia_semana_id
-                    join CARPINCHO_LOVERS.dimension_rango_horario as ts3 on ts.dimension_rango_horario_id = ts3.dimension_rango_horario_id
-                where  ts.dimension_tiempo_id = t1.dimension_tiempo_id 
-                    and ts.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id 
-                    and ts.dimension_tipo_local_categoria_id = t1.dimension_tipo_local_categoria_id
-                group by dia_nombre, horario_descripcion
-            order by sum(cantidad_pedidos) desc) as horario_descripcion,
+                (select top 1 horario_descripcion
+                    from CARPINCHO_LOVERS.hechos_pedidos as ts
+                        join CARPINCHO_LOVERS.dimension_dia_semana as ts2 on ts.dimension_dia_semana_id = ts2.dimension_dia_semana_id
+                        join CARPINCHO_LOVERS.dimension_rango_horario as ts3 on ts.dimension_rango_horario_id = ts3.dimension_rango_horario_id
+                    where  ts.dimension_tiempo_id = t1.dimension_tiempo_id 
+                        and ts.dimension_provincia_localidad_id = t1.dimension_provincia_localidad_id 
+                        and ts.dimension_tipo_local_categoria_id = t1.dimension_tipo_local_categoria_id
+                    group by dia_nombre, horario_descripcion
+                order by sum(cantidad_pedidos) desc) as horario_descripcion,
 
-            mes, anio, dimension_localidad_localidad_nombre, dimension_localidad_provincia_nombre, dimension_categoria_nombre
+                mes, anio, dimension_localidad_localidad_nombre, dimension_localidad_provincia_nombre, dimension_categoria_nombre
 
-    from CARPINCHO_LOVERS.hechos_pedidos as t1
-        join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
-        join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t1.dimension_provincia_localidad_id = t3.dimension_provincia_localidad_id
-        join CARPINCHO_LOVERS.dimension_categoria_local as t4 on t1.dimension_tipo_local_categoria_id = t4.dimension_tipo_local_categoria_id
-    group by mes, anio, dimension_localidad_localidad_nombre, t1.dimension_tiempo_id, t1.dimension_provincia_localidad_id,
-        t1.dimension_tipo_local_categoria_id, dimension_localidad_provincia_nombre, dimension_categoria_nombre
+        from CARPINCHO_LOVERS.hechos_pedidos as t1
+            join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
+            join CARPINCHO_LOVERS.dimension_provincia_localidad as t3 on t1.dimension_provincia_localidad_id = t3.dimension_provincia_localidad_id
+            join CARPINCHO_LOVERS.dimension_categoria_local as t4 on t1.dimension_tipo_local_categoria_id = t4.dimension_tipo_local_categoria_id
+        group by mes, anio, dimension_localidad_localidad_nombre, t1.dimension_tiempo_id, t1.dimension_provincia_localidad_id,
+            t1.dimension_tipo_local_categoria_id, dimension_localidad_provincia_nombre, dimension_categoria_nombre
 
 
     go
