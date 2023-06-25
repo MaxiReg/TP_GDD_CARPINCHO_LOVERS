@@ -712,7 +712,7 @@
     /* Monto total no cobrado por cada local en función de los pedidos cancelados según el día de la semana y 
     la franja horaria (cuentan como pedidos cancelados tanto los que cancela el usuario como el local) */
     create view CARPINCHO_LOVERS.monto_total_no_cobrado(dia, franja_horaria, local, monto) as
-    select dia_nombre, horario_descripcion, dimension_local_nombre, sum(monto_pedidos_total) -- Queremos tomar solo los cancelados y hacer un sum de esos
+    select dia_nombre, horario_descripcion, dimension_local_nombre, sum(monto_pedidos_total)
     from CARPINCHO_LOVERS.hechos_pedidos as t1
         join CARPINCHO_LOVERS.dimension_dia_semana as t2 on t1.dimension_dia_semana_id = t2.dimension_dia_semana_id
         join CARPINCHO_LOVERS.dimension_rango_horario as t3 on t1.dimension_rango_horario_id = t3.dimension_rango_horario_id
@@ -733,14 +733,14 @@
     group by anio, mes, dimension_localidad_localidad_nombre
     go
 
-    /* Desvío promedio en tiempo de entrega según el tipo de movilidad, el día de la semana y la franja horaria.           <------------   hecho solo para pedidos TODO
+    /* Desvío promedio en tiempo de entrega según el tipo de movilidad, el día de la semana y la franja horaria.
     El desvío debe calcularse en minutos y representa la diferencia entre la fecha/hora en que se realizó el pedido y 
     la fecha/hora que se entregó en comparación con los minutos de tiempo estimados.
     Este indicador debe tener en cuenta todos los envíos, es decir, sumar tanto los envíos de pedidos como los de mensajería. */
     
     create view CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega(dia, franja_horaria, tipo_movilidad, desvio_promedio_tiempo_entrega) as
     select dia_nombre, horario_descripcion, dimension_movilidad_tipo_descripcion, 
-        sum(desvio_tiempo_entrega_total)/sum(cantidad) --Nunca dice que tienen que ser solo los envios no cancelados
+        sum(desvio_tiempo_entrega_total)/sum(cantidad)
     from CARPINCHO_LOVERS.vista_general_envios as t1
         join CARPINCHO_LOVERS.dimension_dia_semana as t2 on t1.dimension_dia_semana_id = t2.dimension_dia_semana_id
         join CARPINCHO_LOVERS.dimension_tipo_movilidad as t3 on t1.dimension_tipo_movilidad_id = t3.dimension_tipo_movilidad_id
@@ -773,7 +773,7 @@
     
     go
 
-    /* Porcentaje de pedidos y mensajería entregados mensualmente según el rango etario de los repartidores y la localidad.     <------------   hecho solo para pedidos
+    /* Porcentaje de pedidos y mensajería entregados mensualmente según el rango etario de los repartidores y la localidad.
     Este indicador se debe tener en cuenta y sumar tanto los envíos de pedidos como los de mensajería. 
     El porcentaje se calcula en función del total general de pedidos y envíos mensuales entregados. */
 
@@ -809,7 +809,7 @@
 
     /* Cantidad de reclamos mensuales recibidos por cada local en función del día de la semana y rango horario. */
 
-    create view CARPINCHO_LOVERS.cantidad_reclamos_mensuales(anio, mes, dia, rango_horario, local, cant_reclamos) as -- Discrimina por anio o junta los meses??
+    create view CARPINCHO_LOVERS.cantidad_reclamos_mensuales(anio, mes, dia, rango_horario, local, cant_reclamos) as
     select anio, mes, dia_nombre, horario_descripcion, dimension_local_nombre, sum(cantidad_reclamos)
     from CARPINCHO_LOVERS.hechos_reclamos as t1
         join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
@@ -836,7 +836,7 @@
 
     /* Monto mensual generado en cupones a partir de reclamos. */
 
-    create view CARPINCHO_LOVERS.monto_generado_en_cupones(anio, mes, monto) as -- Asumimos que discrimina por anio
+    create view CARPINCHO_LOVERS.monto_generado_en_cupones(anio, mes, monto) as
     select anio, mes, sum(monto_cupones)
     from CARPINCHO_LOVERS.hechos_reclamos as t1
         join CARPINCHO_LOVERS.dimension_tiempo as t2 on t1.dimension_tiempo_id = t2.dimension_tiempo_id
@@ -845,16 +845,14 @@
     go
     
     ------- CONSULTA VIEWS --------
-/*
-        select * from CARPINCHO_LOVERS.mayor_cant_pedidos
-        select * from CARPINCHO_LOVERS.monto_total_no_cobrado
-        select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
-        select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
-        select * from CARPINCHO_LOVERS.monto_total_cupones
-        select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
-        select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
-        select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
-        select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
-        select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
-        select * from CARPINCHO_LOVERS.monto_generado_en_cupones
-*/
+select * from CARPINCHO_LOVERS.mayor_cant_pedidos
+select * from CARPINCHO_LOVERS.monto_total_no_cobrado
+select * from CARPINCHO_LOVERS.promedio_mensual_envios_pedidos
+select * from CARPINCHO_LOVERS.desvio_promedio_tiempo_entrega
+select * from CARPINCHO_LOVERS.monto_total_cupones
+select * from CARPINCHO_LOVERS.promedio_calificacion_mensual
+select * from CARPINCHO_LOVERS.porcentaje_pedidos_mensajeria_entregados
+select * from CARPINCHO_LOVERS.promedio_valor_asegurado_mensual
+select * from CARPINCHO_LOVERS.cantidad_reclamos_mensuales
+select * from CARPINCHO_LOVERS.promedio_tiempo_resolucion_reclamos
+select * from CARPINCHO_LOVERS.monto_generado_en_cupones
