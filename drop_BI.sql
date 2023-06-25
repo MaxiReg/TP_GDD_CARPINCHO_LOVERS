@@ -5,7 +5,6 @@ go
 drop table CARPINCHO_LOVERS.hechos_mensajeria
 drop table CARPINCHO_LOVERS.hechos_pedidos
 drop table CARPINCHO_LOVERS.hechos_reclamos
-drop table CARPINCHO_LOVERS.hechos_envios
 drop table CARPINCHO_LOVERS.dimension_estado_envio_mensajeria
 drop table CARPINCHO_LOVERS.dimension_estado_pedido
 drop table CARPINCHO_LOVERS.dimension_estado_reclamo
@@ -41,7 +40,6 @@ drop proc CARPINCHO_LOVERS.migrar_dimension_rango_etario
 drop proc CARPINCHO_LOVERS.migrar_hechos_mensajeria
 drop proc CARPINCHO_LOVERS.migrar_hechos_pedidos
 drop proc CARPINCHO_LOVERS.migrar_hechos_reclamo
-drop proc CARPINCHO_LOVERS.migrar_hechos_envios
 
 --DROP FUNCTIONS
 drop function CARPINCHO_LOVERS.buscar_dimension_rango_etario_id
