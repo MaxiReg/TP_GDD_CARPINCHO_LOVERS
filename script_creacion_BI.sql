@@ -695,7 +695,6 @@
 
     /* Día de la semana y franja horaria con mayor cantidad de pedidos según la
     localidad y categoría del local, para cada mes de cada año. */
-    localidad y categoría del local, para cada mes de cada año. */
     create view CARPINCHO_LOVERS.mayor_cant_pedidos (dia, franja_horaria, mes, anio, localidad, provincia, categoria_local) as
     
         select 
